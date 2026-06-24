@@ -4,48 +4,82 @@
       layout:decorate="~{base}">
 <body>
 <th:block layout:fragment="center_body">
-    <div class="main_con clearfix">
-        <div class="left_menu_con clearfix">
-            <h3>USER CENTER</h3>
-            <div class="information clearfix">
-                <a th:href="@{/user/myself_information/}"><img th:src="@{/media/{f}(f=${user.ulogo})}" alt=""></a>
-            </div>
-            <ul>
-                <li><a th:href="@{/user/info/}" class="active">个人信息</a></li>
-                <li><a th:href="@{/user/publishers/}">发布商品</a></li>
-                <li><a th:href="@{/user/changeInformation/}">修改资料</a></li>
-                <li><a th:href="@{/user/changeInPwd/}">修改密码</a></li>
-                <li><a href="/user/order/1">全部订单</a></li>
-                <li><a th:href="@{/user/site/}">收货地址</a></li>
-            </ul>
-        </div>
-        <div class="right_content clearfix">
-            <div class="info_con clearfix">
-                <h3 class="common_title2">基本信息</h3>
-                <ul class="user_info_list">
-                    <li><span>用户名：</span><span th:text="${user.uname}"></span></li>
-                    <li><span>联系方式：</span><span th:text="${user.uphone}"></span></li>
-                    <li><span>联系地址：</span><span th:text="${user.uaddress}"></span></li>
-                </ul>
-            </div>
-            <h3 class="common_title2" th:text="${explain}">最近浏览</h3>
-
-            <ul class="goods_type_list clearfix" style="display: flex; flex-wrap: wrap; clear: both; list-style: none; padding: 0;">
-                <li th:each="good : ${goods_list}" style="float: none; margin-right: 18px; margin-bottom: 20px;">
-                    <a th:href="@{/detail/{id}/(id=${good.id})}">
-                        <img th:src="@{/media/{f}(f=${good.gpic})}" style="width: 160px; height: 160px; object-fit: cover; border: 1px solid #eee;">
-                    </a>
-                    <h4><a th:href="@{/detail/{id}/(id=${good.id})}" th:text="${good.gtitle}"></a></h4>
-                    <div class="operate">
-                        <span class="prize">&yen;<span th:text="${good.gprice}"></span></span>
-                        <span class="unit" th:text="${good.gunit}"></span>
-                    </div>
-                </li>
-            </ul>
-
-        </div>
+<div class="main_con">
+  <div class="left_menu_con">
+    <div class="uc-profile">
+      <a class="uc-profile-ring" th:href="@{/user/myself_information/}">
+        <img th:src="@{/media/{f}(f=${user.ulogo})}" alt="avatar">
+      </a>
+      <span class="uc-profile-name" th:text="${user.uname}">用户名</span>
+      <span class="uc-profile-label">Member</span>
     </div>
-    <script th:if="${message}" th:inline="javascript">alert(/*[[${message}]]*/ '');</script>
+    <nav>
+      <div class="uc-nav-section">账户</div>
+      <ul>
+        <li><a th:href="@{/user/info/}" class="active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>个人信息
+        </a></li>
+        <li><a th:href="@{/user/changeInformation/}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>修改资料
+        </a></li>
+        <li><a th:href="@{/user/changeInPwd/}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>修改密码
+        </a></li>
+      </ul>
+      <div class="uc-nav-section" style="margin-top:8px">交易</div>
+      <ul>
+        <li><a th:href="@{/user/publishers/}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8M12 3v4"/></svg>发布商品
+        </a></li>
+        <li><a href="/user/order/1">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>全部订单
+        </a></li>
+        <li><a th:href="@{/user/site/}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>收货地址
+        </a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="right_content">
+    <div class="uc-panel-header">
+      <h2>个人信息</h2>
+      <p>查看您的账户详情与最近浏览记录</p>
+    </div>
+    <div class="uc-panel-body">
+      <div class="uc-info-grid">
+        <div class="uc-info-card">
+          <div class="uc-info-card-label">用户名</div>
+          <div class="uc-info-card-value" th:text="${user.uname}">—</div>
+        </div>
+        <div class="uc-info-card">
+          <div class="uc-info-card-label">联系方式</div>
+          <div class="uc-info-card-value" th:text="${user.uphone != null and !#strings.isEmpty(user.uphone)} ? ${user.uphone} : '未填写'">—</div>
+        </div>
+        <div class="uc-info-card">
+          <div class="uc-info-card-label">联系地址</div>
+          <div class="uc-info-card-value" th:text="${user.uaddress != null and !#strings.isEmpty(user.uaddress)} ? ${user.uaddress} : '未填写'">—</div>
+        </div>
+      </div>
+      <div class="uc-section-title" th:text="${explain != null} ? ${explain} : '最近浏览'">最近浏览</div>
+      <div th:if="${goods_list == null or #lists.isEmpty(goods_list)}"
+           style="text-align:center;padding:48px 0;color:var(--gray-400);font-size:14px;">暂无浏览记录</div>
+      <div class="uc-goods-grid" th:unless="${goods_list == null or #lists.isEmpty(goods_list)}">
+        <a class="uc-goods-card" th:each="good : ${goods_list}" th:href="@{/detail/{id}/(id=${good.id})}">
+          <img th:src="@{/media/{f}(f=${good.gpic})}" alt="">
+          <div class="uc-goods-card-body">
+            <div class="uc-goods-card-title" th:text="${good.gtitle}"></div>
+            <div>
+              <span class="uc-goods-card-price">&yen;<span th:text="${good.gprice}"></span></span>
+              <span class="uc-goods-card-unit" th:text="${good.gunit}"></span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<script th:if="${message}" th:inline="javascript">alert(/*[[${message}]]*/ '');</script>
 </th:block>
 </body>
 </html>

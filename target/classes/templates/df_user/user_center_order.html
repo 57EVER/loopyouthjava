@@ -4,81 +4,97 @@
       layout:decorate="~{base}">
 <body>
 <th:block layout:fragment="center_body">
-    <div class="main_con clearfix">
-        <div class="left_menu_con clearfix">
-            <h3>USER CENTER</h3>
-            <div class="information clearfix">
-                <a th:href="@{/user/myself_information/}"><img th:src="@{/media/{f}(f=${user.ulogo})}" alt=""></a>
-            </div>
-            <ul>
-                <li><a th:href="@{/user/info/}">个人信息</a></li>
-                <li><a th:href="@{/user/publishers/}">发布商品</a></li>
-                <li><a th:href="@{/user/changeInformation/}">修改资料</a></li>
-                <li><a th:href="@{/user/changeInPwd/}">修改密码</a></li>
-                <li><a th:href="@{/user/order/1}" class="active">全部订单</a></li>
-                <li><a th:href="@{/user/site/}">收货地址</a></li>
-            </ul>
-        </div>
-        <div class="right_content clearfix">
-            <h3 class="common_title2">全部订单</h3>
-            <th:block th:each="orderinfo : ${page.content}">
-                <ul class="order_list_th w978 clearfix">
-                    <li class="col01" th:text="${#temporals.format(orderinfo.odate, 'yyyy-MM-dd HH:mm:ss')}"></li>
-                    <li class="col02">订单号：<span th:text="${orderinfo.oid}"></span></li>
-                    <li class="col02 stress">已支付</li>
-                    <li class="col02 stress"></li>
-                </ul>
-                <table class="order_list_table w980">
-                    <tbody>
-                    <tr th:each="detail, stat : ${orderinfo.detailList}">
-
-                        <td width="50%">
-                            <ul class="order_goods_list clearfix" style="display: flex; align-items: center; padding: 15px 0; margin: 0;">
-                                <li class="col01" style="flex: 0 0 80px; text-align: center;">
-                                    <img th:src="@{/media/{f}(f=${detail.goods.gpic})}" style="width: 60px; height: 60px; object-fit: cover; border: 1px solid #eee;">
-                                </li>
-                                <li class="col02" style="flex: 1; text-align: left; padding: 0 15px; line-height: 1.8;">
-                                    <div th:text="${detail.goods.gtitle}" style="font-weight: 600; font-size: 14px; color: #333; margin-bottom: 4px;"></div>
-                                    <div style="font-size: 12px; color: #888;">
-                                        单价: <em th:text="${detail.goods.gprice}" style="color: #ff3948; font-style: normal; font-weight: bold;"></em> 元
-                                        <span style="margin: 0 8px; color: #ccc;">|</span>
-                                        卖家: <em th:text="${detail.goods.gunit}" style="font-style: normal; color: #555;"></em>
-                                    </div>
-                                </li>
-                                <li class="col03" style="flex: 0 0 60px; text-align: center; font-size: 14px; color: #333;">
-                                    <span th:text="${detail.count}"></span>件
-                                </li>
-                            </ul>
-                        </td>
-
-                        <td width="10%" th:if="${stat.index == 0}" th:rowspan="${stat.size}">
-                            <span th:text="${orderinfo.ototal}"></span>元
-                        </td>
-                        <td width="10%" th:if="${stat.index == 0}" th:rowspan="${stat.size}">
-                            已付款
-                        </td>
-
-                        <td width="10%"><a href="#" class="oper_btn">物流</a></td>
-                        <td width="10%"><a th:href="@{/detail/{id}/(id=${detail.goods.id})}" class="oper_btn">评论</a></td>
-                        <td width="10%">
-                            <a href="tel:15015553093" onclick="alert('如需办理退换货，请联系人工客服。\n客服电话：15015553093');" class="oper_btn">退货</a>
-                        </td>
-
-                    </tr>
-                    </tbody>
-                </table>
-            </th:block>
-
-            <div class="pagenation">
-                <a th:if="${page.hasPrevious()}" th:href="@{/user/order/{idx}(idx=${page.number})}">上一页</a>
-                <th:block th:each="i : ${#numbers.sequence(1, page.totalPages)}">
-                    <a th:if="${i == page.number + 1}" th:href="@{/user/order/{idx}(idx=${i})}" class="active" th:text="${i}"></a>
-                    <a th:unless="${i == page.number + 1}" th:href="@{/user/order/{idx}(idx=${i})}" th:text="${i}"></a>
-                </th:block>
-                <a th:if="${page.hasNext()}" th:href="@{/user/order/{idx}(idx=${page.number + 2})}">下一页</a>
-            </div>
-        </div>
+<div class="main_con">
+  <div class="left_menu_con">
+    <div class="uc-profile">
+      <a class="uc-profile-ring" th:href="@{/user/myself_information/}">
+        <img th:src="@{/media/{f}(f=${user.ulogo})}" alt="avatar">
+      </a>
+      <span class="uc-profile-name" th:text="${user.uname}">用户名</span>
+      <span class="uc-profile-label">Member</span>
     </div>
+    <nav>
+      <div class="uc-nav-section">账户</div>
+      <ul>
+        <li><a th:href="@{/user/info/}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>个人信息
+        </a></li>
+        <li><a th:href="@{/user/changeInformation/}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>修改资料
+        </a></li>
+        <li><a th:href="@{/user/changeInPwd/}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>修改密码
+        </a></li>
+      </ul>
+      <div class="uc-nav-section" style="margin-top:8px">交易</div>
+      <ul>
+        <li><a th:href="@{/user/publishers/}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8M12 3v4"/></svg>发布商品
+        </a></li>
+        <li><a th:href="@{/user/order/1}" class="active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>全部订单
+        </a></li>
+        <li><a th:href="@{/user/site/}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>收货地址
+        </a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="right_content">
+    <div class="uc-panel-header">
+      <h2>全部订单</h2>
+      <p>管理您的购买记录与售后事项</p>
+    </div>
+    <div class="uc-panel-body">
+      <div th:if="${page.content == null or #lists.isEmpty(page.content)}"
+           style="text-align:center;padding:64px 0;color:var(--gray-400);font-size:14px;">暂无订单记录</div>
+
+      <th:block th:each="orderinfo : ${page.content}">
+        <div class="uc-order-block">
+          <div class="uc-order-header">
+            <div class="uc-order-meta">
+              <span class="uc-order-date" th:text="${#temporals.format(orderinfo.odate, 'yyyy-MM-dd HH:mm')}"></span>
+              <span class="uc-order-id">订单号：<span th:text="${orderinfo.oid}"></span></span>
+            </div>
+            <span class="uc-order-status">已支付</span>
+          </div>
+
+          <th:block th:each="detail, stat : ${orderinfo.detailList}">
+            <div class="uc-order-row">
+              <img class="uc-order-img" th:src="@{/media/{f}(f=${detail.goods.gpic})}" alt="">
+              <div class="uc-order-goods-info">
+                <div class="uc-order-goods-title" th:text="${detail.goods.gtitle}"></div>
+                <div class="uc-order-goods-meta">
+                  单价：<em th:text="${detail.goods.gprice}"></em> 元 &nbsp;·&nbsp; 卖家：<span th:text="${detail.goods.gunit}"></span>
+                </div>
+              </div>
+              <div class="uc-order-count" th:text="${detail.count} + ' 件'"></div>
+              <div class="uc-order-total" th:if="${stat.index == 0}" th:rowspan="${stat.size}">
+                ¥<span th:text="${orderinfo.ototal}"></span>
+              </div>
+              <div class="uc-order-paid" th:if="${stat.index == 0}" th:rowspan="${stat.size}">已付款</div>
+              <div class="uc-order-actions">
+                <a href="#" class="uc-order-btn">物流</a>
+                <a th:href="@{/detail/{id}/(id=${detail.goods.id})}" class="uc-order-btn">评论</a>
+                <a href="tel:15015553093" onclick="alert('如需办理退换货，请联系人工客服。\n客服电话：15015553093');" class="uc-order-btn">退货</a>
+              </div>
+            </div>
+          </th:block>
+        </div>
+      </th:block>
+
+      <div class="pagenation" th:if="${page.totalPages > 1}">
+        <a th:if="${page.hasPrevious()}" th:href="@{/user/order/{idx}(idx=${page.number})}">上一页</a>
+        <th:block th:each="i : ${#numbers.sequence(1, page.totalPages)}">
+          <a th:if="${i == page.number + 1}" th:href="@{/user/order/{idx}(idx=${i})}" class="active" th:text="${i}"></a>
+          <a th:unless="${i == page.number + 1}" th:href="@{/user/order/{idx}(idx=${i})}" th:text="${i}"></a>
+        </th:block>
+        <a th:if="${page.hasNext()}" th:href="@{/user/order/{idx}(idx=${page.number + 2})}">下一页</a>
+      </div>
+    </div>
+  </div>
+</div>
 </th:block>
 </body>
 </html>
