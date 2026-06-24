@@ -1,0 +1,211 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+<th:block layout:fragment="head">
+    <script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/static/js/slide.js"></script>
+</th:block>
+</head>
+<body>
+<th:block layout:fragment="center_body">
+
+    <!-- CUSTOMER CHAT POPUP -->
+    <div class="shadow clearfix" id="shadow">
+        <div class="close clearfix">
+            <div class="model clearfix">
+                <div class="site_con">
+                    <p style="text-align:center;font-size:16px;font-weight:600;color:#1a1a1a;padding:12px 0;">客服为你服务</p>
+                    <div class="form_group1" th:if="${informations1 == null || #lists.isEmpty(informations1)}">
+                        <div>
+                            <img th:src="@{/media/{logo}(logo=${user_name?.ulogo})}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;" alt="">
+                        </div>
+                        <p th:text="${nowTime}"></p>
+                    </div>
+                    <th:block th:each="information : ${informations}">
+                        <div class="form_group1" th:if="${information.cusername == username1}">
+                            <div>
+                                <img th:src="@{/media/{logo}(logo=${user_name?.ulogo})}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;" alt="">
+                                <h6><span th:text="${information.cusername}"></span>:<span th:text="${information.ctitle}"></span>,<span th:text="${information.ccontentChart}"></span></h6>
+                            </div>
+                            <p th:text="${information.datePublish}"></p>
+                        </div>
+                        <div class="form_group3" th:if="${information.cusername1 == username1 && information.cusername == user?.uname}">
+                            <div>
+                                <img th:src="@{/media/{logo}(logo=${user?.ulogo})}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;" alt="">
+                                <h6><span th:text="${information.ccontentChart}"></span>:<span th:text="${information.cusername}"></span></h6>
+                            </div>
+                            <p th:text="${information.datePublish}"></p>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+            <form th:action="@{/}" id="formDetil" class="easyui-form" method="POST">
+                <input class="nr" type="text" name="title" required="" placeholder="请输入内容...">
+                <input class="sub" type="submit" value="发送">
+            </form>
+        </div>
+    </div>
+
+    <!-- HERO SLIDESHOW -->
+    <div class="center_con clearfix">
+        <div class="slide fl">
+            <ul class="slide_pics">
+                <li><img src="/static/images/slide07.jpg" alt="slide"></li>
+                <li><img src="/static/images/slide05.jpg" alt="slide"></li>
+                <li><img src="/static/images/slide06.jpg" alt="slide"></li>
+            </ul>
+            <div class="prev"></div>
+            <div class="next"></div>
+            <ul class="points"></ul>
+        </div>
+        <div class="adv fl">
+            <a href="#"><img src="/static/images/adv03.jpg"></a>
+        </div>
+    </div>
+
+    <!-- CATEGORY NAVIGATION -->
+    <div class="category_nav_horizontal">
+        <div class="category_container">
+            <h3 class="category_title">CATEGORIES</h3>
+            <ul class="category_list">
+                <li class="category_featured"><a href="#model01" class="category_item category_item_featured"><img class="category_featured_img" src="/static/images/banner.jpg" alt="书籍"><span class="category_icon_row"><span>书籍</span></span></a></li>
+                <li class="category_featured"><a href="#model02" class="category_item category_item_featured"><img class="category_featured_img" src="/static/images/banner7.jpg" alt="智能"><span class="category_icon_row"><span>智能</span></span></a></li>
+                <li class="category_featured"><a href="#model03" class="category_item category_item_featured"><img class="category_featured_img" src="/static/images/banner3.jpg" alt="衣物"><span class="category_icon_row"><span>衣物</span></span></a></li>
+                <li class="category_featured"><a href="#model04" class="category_item category_item_featured"><img class="category_featured_img" src="/static/images/banner5.jpg" alt="出行"><span class="category_icon_row"><span>出行</span></span></a></li>
+                <li class="category_featured"><a href="#model05" class="category_item category_item_featured"><img class="category_featured_img" src="/static/images/banner6.jpg" alt="乐器"><span class="category_icon_row"><span>乐器</span></span></a></li>
+                <li class="category_featured"><a href="#model06" class="category_item category_item_featured"><img class="category_featured_img" src="/static/images/banner1.jpg" alt="家电"><span class="category_icon_row"><span>家电</span></span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- BOOKS -->
+    <div class="list_model">
+        <div class="list_title clearfix">
+            <h3 class="fl" id="model01">书籍</h3>
+            <div class="subtitle fl">
+                <span>|</span>
+                <a th:each="g : ${type0}" th:href="@{/detail/{id}/(id=${g.id})}" th:text="${#strings.abbreviate(g.gtitle,10)}"></a>
+            </div>
+            <a href="/list1_1_1/" class="goods_more fr" id="fruit_more">查看更多 &rarr;</a>
+        </div>
+        <div class="goods_con clearfix">
+            <ul class="goods_list goods_list_full fl">
+                <li th:each="goods : ${type0}">
+                    <a th:href="@{/detail/{id}/(id=${goods.id})}"><img th:src="@{/media/{pic}(pic=${goods.gpic})}"></a>
+                    <h4><a th:href="@{/detail/{id}/(id=${goods.id})}" th:text="${goods.gtitle}"></a></h4>
+                    <div class="prize">&yen;<span th:text="${goods.gprice}"></span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- SMART -->
+    <div class="list_model">
+        <div class="list_title clearfix">
+            <h3 class="fl" id="model02">智能</h3>
+            <div class="subtitle fl">
+                <span>|</span>
+                <a th:each="g : ${type5}" th:href="@{/detail/{id}/(id=${g.id})}" th:text="${#strings.abbreviate(g.gtitle,10)}"></a>
+            </div>
+            <a href="/list6_1_1/" class="goods_more fr">查看更多 &rarr;</a>
+        </div>
+        <div class="goods_con clearfix">
+            <ul class="goods_list goods_list_full fl">
+                <li th:each="goods : ${type51}">
+                    <a th:href="@{/detail/{id}/(id=${goods.id})}"><img th:src="@{/media/{pic}(pic=${goods.gpic})}"></a>
+                    <h4><a th:href="@{/detail/{id}/(id=${goods.id})}" th:text="${goods.gtitle}"></a></h4>
+                    <div class="prize">&yen;<span th:text="${goods.gprice}"></span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CLOTHING -->
+    <div class="list_model">
+        <div class="list_title clearfix">
+            <h3 class="fl" id="model03">衣物</h3>
+            <div class="subtitle fl">
+                <span>|</span>
+                <a th:each="g : ${type2}" th:href="@{/detail/{id}/(id=${g.id})}" th:text="${#strings.abbreviate(g.gtitle,10)}"></a>
+            </div>
+            <a href="/list3_1_1/" class="goods_more fr">查看更多 &rarr;</a>
+        </div>
+        <div class="goods_con clearfix">
+            <ul class="goods_list goods_list_full fl">
+                <li th:each="goods : ${type21}">
+                    <a th:href="@{/detail/{id}/(id=${goods.id})}"><img th:src="@{/media/{pic}(pic=${goods.gpic})}"></a>
+                    <h4><a th:href="@{/detail/{id}/(id=${goods.id})}" th:text="${goods.gtitle}"></a></h4>
+                    <div class="prize">&yen;<span th:text="${goods.gprice}"></span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- TRAVEL -->
+    <div class="list_model">
+        <div class="list_title clearfix">
+            <h3 class="fl" id="model04">出行</h3>
+            <div class="subtitle fl">
+                <span>|</span>
+                <a th:each="g : ${type3}" th:href="@{/detail/{id}/(id=${g.id})}" th:text="${#strings.abbreviate(g.gtitle,10)}"></a>
+            </div>
+            <a href="/list4_1_1/" class="goods_more fr">查看更多 &rarr;</a>
+        </div>
+        <div class="goods_con clearfix">
+            <ul class="goods_list goods_list_full fl">
+                <li th:each="goods : ${type31}">
+                    <a th:href="@{/detail/{id}/(id=${goods.id})}"><img th:src="@{/media/{pic}(pic=${goods.gpic})}"></a>
+                    <h4><a th:href="@{/detail/{id}/(id=${goods.id})}" th:text="${goods.gtitle}"></a></h4>
+                    <div class="prize">&yen;<span th:text="${goods.gprice}"></span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- INSTRUMENTS -->
+    <div class="list_model">
+        <div class="list_title clearfix">
+            <h3 class="fl" id="model05">乐器</h3>
+            <div class="subtitle fl">
+                <span>|</span>
+                <a th:each="g : ${type4}" th:href="@{/detail/{id}/(id=${g.id})}" th:text="${#strings.abbreviate(g.gtitle,10)}"></a>
+            </div>
+            <a href="/list5_1_1/" class="goods_more fr">查看更多 &rarr;</a>
+        </div>
+        <div class="goods_con clearfix">
+            <ul class="goods_list goods_list_full fl">
+                <li th:each="goods : ${type41}">
+                    <a th:href="@{/detail/{id}/(id=${goods.id})}"><img th:src="@{/media/{pic}(pic=${goods.gpic})}"></a>
+                    <h4><a th:href="@{/detail/{id}/(id=${goods.id})}" th:text="${goods.gtitle}"></a></h4>
+                    <div class="prize">&yen;<span th:text="${goods.gprice}"></span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- APPLIANCES -->
+    <div class="list_model">
+        <div class="list_title clearfix">
+            <h3 class="fl" id="model06">家电</h3>
+            <div class="subtitle fl">
+                <span>|</span>
+                <a th:each="g : ${type1}" th:href="@{/detail/{id}/(id=${g.id})}" th:text="${#strings.abbreviate(g.gtitle,10)}"></a>
+            </div>
+            <a href="/list2_1_1/" class="goods_more fr">查看更多 &rarr;</a>
+        </div>
+        <div class="goods_con clearfix">
+            <ul class="goods_list goods_list_full fl">
+                <li th:each="goods : ${type11}">
+                    <a th:href="@{/detail/{id}/(id=${goods.id})}"><img th:src="@{/media/{pic}(pic=${goods.gpic})}"></a>
+                    <h4><a th:href="@{/detail/{id}/(id=${goods.id})}" th:text="${goods.gtitle}"></a></h4>
+                    <div class="prize">&yen;<span th:text="${goods.gprice}"></span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</th:block>
+</body>
+</html>

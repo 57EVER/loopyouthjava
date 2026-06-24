@@ -1,0 +1,17 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title th:text="'循环青年 ' + ${title}">循环青年</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+    <th:block layout:fragment="head"></th:block>
+    <th:block layout:fragment="script"></th:block>
+</head>
+<body>
+<th:block layout:fragment="body"></th:block>
+</body>
+</html>

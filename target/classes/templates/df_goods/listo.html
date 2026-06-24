@@ -1,0 +1,56 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{df_goods/base}">
+<body>
+<th:block layout:fragment="center_content">
+
+    <div class="breadcrumb">
+        <a th:href="@{/}">全部分类</a>
+        <span>&gt;</span>
+        <a th:href="@{/list{tid}_1_1/(tid=${typeinfo.id})}" th:text="${typeinfo.ttitle}"></a>
+    </div>
+
+    <div class="sort_bar">
+        <a th:href="@{/list{tid}_1_1/(tid=${typeinfo.id})}"
+           th:classappend="${sort == '1'} ? 'active' : ''">默认</a>
+        <a th:href="@{/list{tid}_1_2/(tid=${typeinfo.id})}"
+           th:classappend="${sort == '2'} ? 'active' : ''">价格</a>
+        <a th:href="@{/list{tid}_1_3/(tid=${typeinfo.id})}"
+           th:classappend="${sort == '3'} ? 'active' : ''">人气</a>
+    </div>
+
+    <div class="goods_type_list clearfix">
+        <li th:each="goods : ${page.content}">
+            <a th:href="@{/detail/{id}/(id=${goods.id})}">
+                <img th:src="@{/media/{pic}(pic=${goods.gpic})}">
+            </a>
+            <h4>
+                <a th:href="@{/detail/{id}/(id=${goods.id})}" th:text="${goods.gtitle}"></a>
+            </h4>
+            <div class="operate">
+                <span class="prize">&yen;<span th:text="${goods.gprice}"></span></span>
+                <span class="unit" th:text="${goods.gunit}"></span>
+            </div>
+        </li>
+    </div>
+
+    <div class="pagenation">
+        <a th:if="${page.hasPrevious()}"
+           th:href="@{/list{tid}_{pindex}_{sort}/(tid=${typeinfo.id},pindex=${page.number},sort=${sort})}">
+            &larr; 上一页
+        </a>
+        <th:block th:each="pnum : ${#numbers.sequence(1, page.totalPages)}">
+            <a th:href="@{/list{tid}_{pindex}_{sort}/(tid=${typeinfo.id},pindex=${pnum},sort=${sort})}"
+               th:text="${pnum}"
+               th:classappend="${pnum == page.number + 1} ? 'active' : ''"></a>
+        </th:block>
+        <a th:if="${page.hasNext()}"
+           th:href="@{/list{tid}_{pindex}_{sort}/(tid=${typeinfo.id},pindex=${page.number + 2},sort=${sort})}">
+            下一页 &rarr;
+        </a>
+    </div>
+
+</th:block>
+</body>
+</html>

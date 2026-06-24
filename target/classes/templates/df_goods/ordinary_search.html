@@ -1,0 +1,56 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<body>
+<th:block layout:fragment="center_body">
+
+    <div class="navbar_con">
+        <div class="navbar clearfix">
+            <div class="subnav_con fl">
+                <h1>全部分类</h1>
+                <span></span>
+                <ul class="subnav">
+                    <li><a href="/list1_1_1/">书籍</a></li>
+                    <li><a href="/list2_1_1/">家电</a></li>
+                    <li><a href="/list3_1_1/">衣物</a></li>
+                    <li><a href="/list4_1_1/">出行</a></li>
+                    <li><a href="/list5_1_1/">乐器</a></li>
+                    <li><a href="/list6_1_1/">智能</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div style="max-width:1200px;margin:24px auto;padding:0 24px">
+        <div th:if="${search_status == 0}" style="text-align:center;padding:80px 0;color:var(--gray-400);font-size:16px">
+            <p>没有找到相关商品，换个关键词试试吧</p>
+        </div>
+
+        <div class="goods_type_list clearfix" th:if="${search_status != 0}">
+            <li th:each="goods : ${page.content}">
+                <a th:href="@{/detail/{id}/(id=${goods.id})}">
+                    <img th:src="@{/media/{pic}(pic=${goods.gpic})}">
+                </a>
+                <h4>
+                    <a th:href="@{/detail/{id}/(id=${goods.id})}" th:text="${goods.gtitle}"></a>
+                </h4>
+                <div class="operate">
+                    <span class="prize">&yen;<span th:text="${goods.gprice}"></span></span>
+                    <span class="unit" th:text="${goods.gunit}"></span>
+                </div>
+            </li>
+        </div>
+
+        <div class="pagenation" th:if="${search_status != 0 && page.totalPages > 1}">
+            <a th:if="${page.hasPrevious()}" th:href="@{/search(q=${param.q},pindex=${page.number})}">&larr; 上一页</a>
+            <th:block th:each="pnum : ${#numbers.sequence(1, page.totalPages)}">
+                <a th:href="@{/search(q=${param.q},pindex=${pnum})}" th:text="${pnum}" th:classappend="${pnum == page.number + 1} ? 'active' : ''"></a>
+            </th:block>
+            <a th:if="${page.hasNext()}" th:href="@{/search(q=${param.q},pindex=${page.number + 2})}">下一页 &rarr;</a>
+        </div>
+    </div>
+
+</th:block>
+</body>
+</html>

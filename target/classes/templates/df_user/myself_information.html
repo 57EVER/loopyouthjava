@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="${user.uname} + '的个人中心'">个人中心</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a1a;background:#fff;line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+.mi-header{border-bottom:1px solid #e5e5e5;background:#fff;position:sticky;top:0;z-index:100}
+.mi-header-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.mi-brand{font-size:16px;font-weight:700;color:#1a1a1a;letter-spacing:-.3px}
+.mi-nav{display:flex;gap:24px}
+.mi-nav a{font-size:14px;color:#737373;font-weight:500;transition:color .25s}
+.mi-nav a:hover{color:#000}
+
+.mi-hero{max-width:1200px;margin:48px auto;padding:0 24px;display:flex;gap:48px;align-items:flex-start}
+.mi-hero-info{flex:1}
+.mi-hero-info h1{font-size:32px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.mi-hero-info .mi-subtitle{font-size:14px;color:#a3a3a3;margin-bottom:32px}
+.mi-avatar{width:320px;height:320px;flex-shrink:0;border-radius:12px;overflow:hidden;border:1px solid #e5e5e5}
+.mi-avatar img{width:100%;height:100%;object-fit:cover;filter:grayscale(15%);transition:filter .4s}
+.mi-avatar:hover img{filter:grayscale(0%)}
+
+.mi-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid #e5e5e5;border-radius:8px;overflow:hidden}
+.mi-info-item{padding:16px 20px;border-bottom:1px solid #f5f5f5}
+.mi-info-item:nth-child(odd){border-right:1px solid #f5f5f5}
+.mi-info-item:nth-last-child(-n+2){border-bottom:none}
+.mi-info-label{font-size:11px;font-weight:600;color:#a3a3a3;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.mi-info-value{font-size:14px;color:#1a1a1a;font-weight:500}
+.mi-info-empty{color:#d4d4d4}
+
+.mi-section{max-width:1200px;margin:64px auto;padding:0 24px}
+.mi-section-title{font-size:12px;font-weight:600;color:#a3a3a3;text-transform:uppercase;letter-spacing:2px;padding-bottom:16px;border-bottom:1px solid #e5e5e5;margin-bottom:32px}
+
+.mi-timeline{display:flex;flex-direction:column;gap:16px}
+.mi-timeline-item{display:flex;gap:20px;padding:20px;border:1px solid #e5e5e5;border-radius:8px;transition:border-color .25s}
+.mi-timeline-item:hover{border-color:#000}
+.mi-timeline-img{width:56px;height:56px;border-radius:6px;overflow:hidden;flex-shrink:0;border:1px solid #e5e5e5}
+.mi-timeline-img img{width:100%;height:100%;object-fit:cover}
+.mi-timeline-body h4{font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
+.mi-timeline-body h6{font-size:13px;color:#737373;margin-bottom:4px}
+.mi-timeline-body p{font-size:13px;color:#a3a3a3}
+.mi-timeline-empty{padding:24px;text-align:center;color:#d4d4d4;font-size:14px;border:1px solid #f5f5f5;border-radius:8px}
+
+.mi-goods-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.mi-goods-card{border:1px solid #e5e5e5;border-radius:8px;overflow:hidden;transition:all .25s}
+.mi-goods-card:hover{border-color:#000;transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,.12)}
+.mi-goods-card img{width:100%;height:200px;object-fit:cover;filter:grayscale(15%);transition:filter .4s}
+.mi-goods-card:hover img{filter:grayscale(0%)}
+.mi-goods-empty{grid-column:1/-1;padding:24px;text-align:center;color:#d4d4d4;font-size:14px}
+
+.mi-footer{border-top:1px solid #e5e5e5;margin-top:80px;padding:32px 0;text-align:center}
+.mi-footer p{font-size:12px;color:#a3a3a3;letter-spacing:.5px}
+
+@media(max-width:768px){
+  .mi-hero{flex-direction:column-reverse;gap:24px}
+  .mi-avatar{width:100%;height:240px}
+  .mi-info-grid{grid-template-columns:1fr}
+  .mi-info-item{border-right:none !important}
+  .mi-goods-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+<script src="/static/asserts/js/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="mi-header">
+    <div class="mi-header-inner">
+        <a th:href="@{/}" class="mi-brand">loop&middot;youth</a>
+        <nav class="mi-nav">
+            <a th:href="@{/user/info/}">返回用户中心</a>
+            <a href="#sold">出售记录</a>
+            <a href="#goods">发布商品</a>
+        </nav>
+    </div>
+</div>
+
+<div class="mi-hero">
+    <div class="mi-hero-info">
+        <h1>Hi!</h1>
+        <p class="mi-subtitle">这是我的个人资料</p>
+        <div class="mi-info-grid">
+            <div class="mi-info-item">
+                <div class="mi-info-label">用户名</div>
+                <div class="mi-info-value" th:text="${user.uname}"></div>
+            </div>
+            <div class="mi-info-item">
+                <div class="mi-info-label">性别</div>
+                <div class="mi-info-value">
+                    <span th:if="${user.usex}" th:text="${user.usex}"></span>
+                    <span th:unless="${user.usex}" class="mi-info-empty">暂无填写</span>
+                </div>
+            </div>
+            <div class="mi-info-item">
+                <div class="mi-info-label">年龄</div>
+                <div class="mi-info-value">
+                    <span th:if="${user.uage}" th:text="${user.uage}"></span>
+                    <span th:unless="${user.uage}" class="mi-info-empty">暂无填写</span>
+                </div>
+            </div>
+            <div class="mi-info-item">
+                <div class="mi-info-label">发货地址</div>
+                <div class="mi-info-value">
+                    <span th:if="${user.uaddress}" th:text="${user.uaddress}"></span>
+                    <span th:unless="${user.uaddress}" class="mi-info-empty">暂无填写</span>
+                </div>
+            </div>
+            <div class="mi-info-item">
+                <div class="mi-info-label">邮箱</div>
+                <div class="mi-info-value">
+                    <span th:if="${user.uemail}" th:text="${user.uemail}"></span>
+                    <span th:unless="${user.uemail}" class="mi-info-empty">暂无填写</span>
+                </div>
+            </div>
+            <div class="mi-info-item">
+                <div class="mi-info-label">联系方式</div>
+                <div class="mi-info-value">
+                    <span th:if="${user.uphone}" th:text="${user.uphone}"></span>
+                    <span th:unless="${user.uphone}" class="mi-info-empty">暂无填写</span>
+                </div>
+            </div>
+            <div class="mi-info-item" style="grid-column:1/-1;border-right:none">
+                <div class="mi-info-label">个性宣言</div>
+                <div class="mi-info-value">
+                    <span th:if="${user.upersonInf}" th:text="${user.upersonInf}"></span>
+                    <span th:unless="${user.upersonInf}" class="mi-info-empty">暂无填写</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mi-avatar">
+        <img th:src="@{/media/{logo}(logo=${user.ulogo})}" alt="">
+    </div>
+</div>
+
+<div class="mi-section" id="sold">
+    <div class="mi-section-title">Sale History</div>
+    <div class="mi-timeline">
+        <th:block th:each="orderinf : ${orderinfs}">
+            <th:block th:each="inf : ${infors}">
+                <div class="mi-timeline-item" th:if="${orderinf.goodsId == inf.id}">
+                    <a th:href="@{/detail/{id}/(id=${orderinf.goodsId})}" class="mi-timeline-img">
+                        <img th:src="@{/media/{pic}(pic=${inf.gpic})}" alt="">
+                    </a>
+                    <div class="mi-timeline-body">
+                        <h4>买家：<span th:text="${orderinf.username}"></span></h4>
+                        <h6>商品：<span th:text="${inf.gtitle}"></span></h6>
+                        <p>购买于 <span th:text="${orderinf.datatime}"></span></p>
+                    </div>
+                </div>
+            </th:block>
+        </th:block>
+        <div class="mi-timeline-empty" th:if="${orderinfs == null or #lists.isEmpty(orderinfs)}">暂无出售记录</div>
+    </div>
+</div>
+
+<div class="mi-section" id="goods">
+    <div class="mi-section-title">My Goods</div>
+    <div class="mi-goods-grid">
+        <th:block th:each="good : ${goods}">
+            <a th:href="@{/detail/{id}/(id=${good.id})}" class="mi-goods-card">
+                <img th:src="@{/media/{pic}(pic=${good.gpic})}" alt="">
+            </a>
+        </th:block>
+        <p class="mi-goods-empty" th:if="${goods == null or #lists.isEmpty(goods)}">该用户没有上架商品</p>
+    </div>
+</div>
+
+<div class="mi-footer">
+    <p>CAMPUS TRADING COMMUNITY</p>
+</div>
+
+<div th:if="${message}">
+    <script th:inline="javascript">
+        var msg = [[${message}]];
+        alert(msg);
+    </script>
+</div>
+</body>
+</html>

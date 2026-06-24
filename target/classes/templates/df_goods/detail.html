@@ -1,0 +1,132 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{df_goods/base}">
+<head>
+<th:block layout:fragment="head">
+    <script type="text/javascript">
+        function plus() {
+            var num = parseInt($('#num_show').val());
+            var stock = parseInt($('#stock').text());
+            if (num < stock) {
+                $('#num_show').val(num + 1);
+                var price = parseFloat($('#show_price').text());
+                $('#show_total').text(((num + 1) * price).toFixed(2));
+            }
+        }
+        function minus() {
+            var num = parseInt($('#num_show').val());
+            if (num > 1) {
+                $('#num_show').val(num - 1);
+                var price = parseFloat($('#show_price').text());
+                $('#show_total').text(((num - 1) * price).toFixed(2));
+            }
+        }
+    </script>
+</th:block>
+</head>
+<body>
+<th:block layout:fragment="center_content">
+
+    <div class="breadcrumb">
+        <a th:href="@{/}">全部分类</a>
+        <span>&gt;</span>
+        <a th:href="@{/list{tid}_1_1/(tid=${goods.gtype.id})}" th:text="${goods.gtype.ttitle}"></a>
+        <span>&gt;</span>
+        <span th:text="${goods.gtitle}"></span>
+    </div>
+
+    <div class="goods_detail_con clearfix">
+        <div class="goods_detail_pic fl">
+            <img th:src="@{/media/{pic}(pic=${goods.gpic})}">
+        </div>
+        <div class="goods_detail_list fr">
+            <h3 th:text="${goods.gtitle}"></h3>
+            <p>
+                卖家：<a th:href="@{/user/shoper_information/{gunit}/(gunit=${goods.gunit})}"
+                         th:text="${goods.gunit}" style="color:var(--gray-500);border-bottom:1px solid var(--gray-300)"></a>
+            </p>
+            <p th:text="${goods.gjianjie}" style="color:var(--gray-500);margin-top:8px"></p>
+            <div class="prize_bar">
+                <span class="show_pirze">&yen; <em id="show_price" th:text="${goods.gprice}"></em></span>
+                <span class="show_unit">单位：件</span>
+                <span style="margin-left:24px;color:var(--gray-400)">库存：<em id="stock" th:text="${goods.gkucun}"></em></span>
+            </div>
+            <div class="goods_num">
+                <span class="num_name">数量</span>
+                <div class="num_add">
+                    <div class="minus" onclick="minus();">-</div>
+                    <input type="text" id="num_show" value="1">
+                    <div class="add" onclick="plus();">+</div>
+                </div>
+            </div>
+            <div class="total">总价：&yen; <em id="show_total" th:text="${goods.gprice}"></em></div>
+            <div class="operate_btn">
+                <th:block th:if="${session.user_name != null}">
+                    <a href="javascript:;" class="buy_btn" id="buy_now">立即购买</a>
+                    <a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
+                </th:block>
+                <th:block th:unless="${session.user_name != null}">
+                    <a th:href="@{/user/login/}" class="buy_btn">立即购买</a>
+                    <a th:href="@{/user/login/}" class="add_cart">加入购物车</a>
+                </th:block>
+            </div>
+        </div>
+    </div>
+
+    <div class="main_wrap clearfix">
+        <div class="l_wrap fl">
+            <div class="new_goods">
+                <h3>NEW</h3>
+                <ul>
+                    <li th:each="item : ${news}">
+                        <a th:href="@{/detail/{id}/(id=${item.id})}">
+                            <img th:src="@{/media/{pic}(pic=${item.gpic})}">
+                        </a>
+                        <h4><a th:href="@{/detail/{id}/(id=${item.id})}" th:text="${item.gtitle}"></a></h4>
+                        <div class="prize">&yen;<span th:text="${item.gprice}"></span></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="r_wrap fr">
+            <ul class="detail_tab clearfix">
+                <li class="active"><a href="javascript:;">商品介绍</a></li>
+                <li><a th:href="@{/content/{id}/1/(id=${goods.id})}">评论</a></li>
+            </ul>
+            <div class="tab_content">
+                <div th:utext="${goods.gcontent}"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            var $add_x = $('#add_cart').offset().left;
+            var $add_y = $('#add_cart').offset().top;
+            $('#add_cart').click(function () {
+                var num = $('#num_show').val();
+                var goodsId = [[${goods.id}]];
+                $.get('/cart/add' + goodsId + '_' + num + '/', function (data) {
+                    $(".add_jump").css({'left': $add_x + 80, 'top': $add_y + 10, 'display': 'block'});
+                    $(".add_jump").stop().animate({
+                        'left': $add_x + 400, 'top': $add_y - 200
+                    }, "fast", function () {
+                        $(".add_jump").fadeOut('fast', function () {
+                            if (typeof data === 'object') { $('#show_count').html(data.count); }
+                        });
+                    });
+                });
+            });
+            $('#buy_now').click(function () {
+                var num = $('#num_show').val();
+                var goodsId = [[${goods.id}]];
+                $.get('/cart/add' + goodsId + '_' + num + '/', function () { location.href = '/cart/'; });
+            });
+        });
+    </script>
+    <div class="add_jump" style="display:none;">+1</div>
+
+</th:block>
+</body>
+</html>

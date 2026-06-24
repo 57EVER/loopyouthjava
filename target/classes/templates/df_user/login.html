@@ -1,0 +1,84 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base_foot}">
+<head>
+<th:block layout:fragment="head">
+<script>
+    $(function () {
+        name_error = false; pwd_error = false; vc_error = false;
+        if(/*[[${error_name}]]*/ 0 ==1){ $('.user_error').html('用户名错误').show(); }
+        if(/*[[${error_pwd}]]*/ 0 ==1){ $('.pwd_error').html('密码错误').show(); }
+        if(/*[[${error_vc}]]*/ 0 ==1){ $('.vc_error').html('验证码错误').show(); }
+        $('.name_input').blur(function () {
+            if($('.name_input').val().length==0){ $('.user_error').html('请填写用户名').show(); name_error = false; }
+            else { $('.user_error').hide(); name_error = true; }
+        });
+        $('.pass_input').blur(function () {
+            if($('.pass_input').val().length==0){ $('.pwd_error').html('请输入密码').show(); pwd_error = false; }
+            else { $('.pwd_error').hide(); pwd_error = true; }
+        });
+        $('.vc_input').blur(function () {
+            if($('.vc_input').val().length==0){ $('.vc_error').html('请输入验证码').show(); vc_error = false; }
+            else { $('.vc_error').hide(); vc_error = true; }
+        });
+    })
+</script>
+</th:block>
+</head>
+<body>
+<th:block layout:fragment="body">
+    <div class="new_login_container">
+        <div class="login_split_left">
+            <img src="/static/images/image copy.png" alt="loop-youth">
+        </div>
+        <div class="login_split_right">
+            <div class="back_home_link">
+                <a th:href="@{/}">&larr; 返回首页</a>
+            </div>
+            <div class="login_form_container">
+                <div class="login_header_text">
+                    <h1>登录</h1>
+                    <a th:href="@{/user/register/}" class="register_link_top">注册</a>
+                </div>
+                <form th:action="@{/user/login_handle/}" method="post" class="new_login_form">
+                    <div class="input_group">
+                        <input type="text" name="username" class="name_input" th:value="${uname}" placeholder="用户名">
+                        <div class="user_error">输入错误</div>
+                    </div>
+                    <div class="input_group">
+                        <input type="password" name="pwd" class="pass_input" th:value="${password}" placeholder="密码">
+                        <div class="pwd_error">输入错误</div>
+                    </div>
+                    <div class="input_group">
+                        <div class="verify_row">
+                            <input type="text" name="vc" class="vc_input" placeholder="验证码">
+                            <div class="verify_code_box">
+                                <img id='verifycode' src="/user/verifycode/?1" alt="验证码"/>
+                                <span id='verifycodeChange' title="换一个">&#10227;</span>
+                            </div>
+                        </div>
+                        <div class="vc_error">输入错误</div>
+                    </div>
+                    <div class="checkbox_group">
+                        <label>
+                            <input type="checkbox" name="jizhu" value="1" checked="checked">
+                            <span>记住用户名</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="submit_button">登录</button>
+                </form>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    $(function(){
+        $('#verifycodeChange').css('cursor','pointer').click(function() {
+            $('#verifycode').attr('src',$('#verifycode').attr('src')+1)
+        });
+    });
+</script>
+<script th:if="${message}" th:inline="javascript">alert(/*[[${message}]]*/ '');</script>
+</th:block>
+</body>
+</html>

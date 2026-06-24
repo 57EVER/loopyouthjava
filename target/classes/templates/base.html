@@ -1,0 +1,89 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base_foot}">
+<head>
+    <th:block layout:fragment="head"></th:block>
+    <th:block layout:fragment="script"></th:block>
+</head>
+<body>
+<th:block layout:fragment="body">
+
+    <div class="header_con" id="header_con">
+        <div class="header">
+            <div class="welcome">loop&middot;youth</div>
+            <div class="fr">
+                <th:block th:if="${session.user_name != null}">
+                    <div class="login_btn fl" style="display: flex; align-items: center; gap: 8px; height: 100%;">
+                        <img th:src="@{/media/{logo}(logo=${user?.ulogo})}" alt="avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block; margin: 0;"/>
+                        <font th:text="${session.user_name}" style="font-size: 14px; line-height: 1;"></font>
+                    </div>
+                    <div class="login_btn fl" style="display: flex; align-items: center; height: 100%;">
+                        <span style="margin: 0 10px;">|</span>
+                        <a th:href="@{/user/logout/}">退出</a>
+                    </div>
+                </th:block>
+                <th:block th:unless="${session.user_name != null}">
+                    <div class="login_btn fl">
+                        <a th:href="@{/user/login/}">登录</a>
+                        <span>|</span>
+                        <a th:href="@{/user/register/}">注册</a>
+                    </div>
+                </th:block>
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a th:href="@{/}">首页</a>
+                    <span>|</span>
+                    <a th:href="@{/user/info/}">用户中心</a>
+                    <span>|</span>
+                    <a th:href="@{/user/message/}">消息中心</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search_bar clearfix">
+        <div class="search_con fl">
+            <script>
+                $(function () {
+                    $('.input_btn').click(function () {
+                        q = $('.input_text').val();
+                        if(q==""){
+                            alert("请输入搜索内容");
+                        } else {
+                            location.href = '/search?q='+q+'&pindex=1'
+                        }
+                    })
+                })
+            </script>
+            <input type="text" class="input_text fl" name="q" placeholder="搜索你需要的...">
+            <input type="button" class="input_btn fr" name="" value="搜索">
+        </div>
+
+        <div class="guest_cart fr" th:if="${guest_cart == 1}">
+            <a th:href="@{/cart/}" class="cart_name fl">购物车</a>
+            <div class="goods_count fl" id="show_count" th:text="${cart_num}">0</div>
+        </div>
+        <div class="guest_cart fr" th:unless="${guest_cart == 1}">
+            <a th:href="@{/cart/}" class="cart_name fl">购物车</a>
+            <div class="goods_count fl" id="show_count">0</div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="content"></th:block>
+    <th:block layout:fragment="center_body"></th:block>
+
+    <div class="footer">
+        <div class="foot_link">
+            <a th:href="@{/}">首页</a>
+            <span>|</span>
+            <a th:href="@{/user/info/}">用户中心</a>
+            <span>|</span>
+            <a th:href="@{/user/message/}">消息中心</a>
+        </div>
+        <p>CAMPUS TRADING COMMUNITY &copy; loop&middot;youth</p>
+    </div>
+
+</th:block>
+</body>
+</html>

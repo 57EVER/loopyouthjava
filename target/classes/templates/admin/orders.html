@@ -1,0 +1,52 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <th:block layout:fragment="head"></th:block>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="adm_card">
+        <div class="adm_table_wrap">
+            <table class="adm_table">
+                <thead>
+                    <tr>
+                        <th>订单号</th>
+                        <th>买家</th>
+                        <th>金额</th>
+                        <th>地址</th>
+                        <th>支付状态</th>
+                        <th>下单时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="o : ${orders.content}">
+                        <td class="adm_mono" th:text="${o.oid}"></td>
+                        <td th:text="${o.user.uname}"></td>
+                        <td th:text="'¥' + ${o.ototal}"></td>
+                        <td th:text="${o.oaddress}"></td>
+                        <td>
+                            <span class="adm_badge" th:classappend="${o.getOIsPay() ? 'adm_badge_green' : 'adm_badge_yellow'}"
+                                  th:text="${o.getOIsPay() ? '已支付' : '未支付'}"></span>
+                        </td>
+                        <td th:text="${#temporals.format(o.odate, 'yyyy-MM-dd HH:mm')}"></td>
+                    </tr>
+                    <tr th:if="${orders.content.isEmpty()}">
+                        <td colspan="6" class="adm_empty">暂无数据</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="adm_pagination" th:if="${orders.totalPages > 1}">
+            <a th:href="@{/admin/orders(page=${orders.number - 1})}"
+               th:if="${orders.number > 0}" class="adm_btn adm_btn_sm">上一页</a>
+            <span class="adm_page_info"
+                  th:text="'第 ' + ${orders.number + 1} + ' / ' + ${orders.totalPages} + ' 页'"></span>
+            <a th:href="@{/admin/orders(page=${orders.number + 1})}"
+               th:if="${orders.number + 1 < orders.totalPages}" class="adm_btn adm_btn_sm">下一页</a>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

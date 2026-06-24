@@ -1,0 +1,47 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<body>
+<th:block layout:fragment="center_body">
+    <div class="main_con clearfix">
+        <div class="left_menu_con clearfix">
+            <h3>USER CENTER</h3>
+            <div class="information clearfix">
+                <a th:href="@{/user/myself_information/}"><img th:src="@{/media/{f}(f=${user.ulogo})}" alt=""></a>
+            </div>
+            <ul>
+                <li><a th:href="@{/user/info/}" class="active">个人信息</a></li>
+                <li><a th:href="@{/user/publishers/}">发布商品</a></li>
+                <li><a th:href="@{/user/changeInformation/}">修改资料</a></li>
+                <li><a th:href="@{/user/changeInPwd/}">修改密码</a></li>
+                <li><a href="/user/order/1">全部订单</a></li>
+                <li><a th:href="@{/user/site/}">收货地址</a></li>
+            </ul>
+        </div>
+        <div class="right_content clearfix">
+            <div class="info_con clearfix">
+                <h3 class="common_title2">基本信息</h3>
+                <ul class="user_info_list">
+                    <li><span>用户名：</span><span th:text="${user.uname}"></span></li>
+                    <li><span>联系方式：</span><span th:text="${user.uphone}"></span></li>
+                    <li><span>联系地址：</span><span th:text="${user.uaddress}"></span></li>
+                </ul>
+            </div>
+            <h3 class="common_title2" th:text="${explain}">最近浏览</h3>
+            <div class="goods_type_list clearfix">
+                <li th:each="good : ${goods_list}">
+                    <a th:href="@{/detail/{id}/(id=${good.id})}"><img th:src="@{/media/{f}(f=${good.gpic})}"></a>
+                    <h4><a th:href="@{/detail/{id}/(id=${good.id})}" th:text="${good.gtitle}"></a></h4>
+                    <div class="operate">
+                        <span class="prize">&yen;<span th:text="${good.gprice}"></span></span>
+                        <span class="unit" th:text="${good.gunit}"></span>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </div>
+<script th:if="${message}" th:inline="javascript">alert(/*[[${message}]]*/ '');</script>
+</th:block>
+</body>
+</html>

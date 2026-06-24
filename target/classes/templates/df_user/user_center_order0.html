@@ -1,0 +1,62 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<body>
+<th:block layout:fragment="center_body">
+    <div class="main_con clearfix">
+        <div class="left_menu_con clearfix">
+            <h3>USER CENTER</h3>
+            <div class="information clearfix">
+                <a th:href="@{/user/myself_information/}"><img th:src="@{/media/{f}(f=${user.ulogo})}" alt=""></a>
+            </div>
+            <ul>
+                <li><a th:href="@{/user/info/}">个人信息</a></li>
+                <li><a th:href="@{/user/publishers/}">发布商品</a></li>
+                <li><a th:href="@{/user/changeInformation/}">修改资料</a></li>
+                <li><a th:href="@{/user/changeInPwd/}">修改密码</a></li>
+                <li><a th:href="@{/user/order/1}" class="active">全部订单</a></li>
+                <li><a th:href="@{/user/site/}">收货地址</a></li>
+            </ul>
+        </div>
+        <div class="right_content clearfix">
+            <h3 class="common_title2">全部订单</h3>
+            <th:block th:each="orderinfo : ${page.content}">
+                <ul class="order_list_th w978 clearfix">
+                    <li class="col01" th:text="${#temporals.format(orderinfo.odate, 'yyyy-MM-dd HH:mm:ss')}"></li>
+                    <li class="col02">订单号：<span th:text="${orderinfo.oid}"></span></li>
+                    <li class="col02 stress">已支付</li>
+                    <li class="col02 stress"></li>
+                </ul>
+                <table class="order_list_table w980">
+                    <tbody>
+                        <tr>
+                            <td width="50%">
+                                <ul class="order_goods_list clearfix" th:each="detail : ${orderinfo.detailList}">
+                                    <li class="col01"><img th:src="@{/media/{f}(f=${detail.goods.gpic})}"></li>
+                                    <li class="col02"><span th:text="${detail.goods.gtitle}"></span><em th:text="${detail.goods.gprice}"></em>元 &nbsp; 卖家:<em th:text="${detail.goods.gunit}"></em></li>
+                                    <li class="col03"><span th:text="${detail.count}"></span>件</li>
+                                </ul>
+                            </td>
+                            <td width="10%"><span th:text="${orderinfo.ototal}"></span>元</td>
+                            <td width="10%">已付款</td>
+                            <td width="10%"><a href="#" class="oper_btn">物流</a></td>
+                            <td width="10%"><a href="#" class="oper_btn">评论</a></td>
+                            <td width="10%"><a href="#" class="oper_btn">退货</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </th:block>
+            <div class="pagenation">
+                <a th:if="${page.hasPrevious()}" th:href="@{/user/order/{idx}(idx=${page.number})}">上一页</a>
+                <th:block th:each="i : ${#numbers.sequence(1, page.totalPages)}">
+                    <a th:if="${i == page.number + 1}" th:href="@{/user/order/{idx}(idx=${i})}" class="active" th:text="${i}"></a>
+                    <a th:unless="${i == page.number + 1}" th:href="@{/user/order/{idx}(idx=${i})}" th:text="${i}"></a>
+                </th:block>
+                <a th:if="${page.hasNext()}" th:href="@{/user/order/{idx}(idx=${page.number + 2})}">下一页</a>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>
