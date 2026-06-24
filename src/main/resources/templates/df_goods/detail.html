@@ -33,7 +33,7 @@
         <span>&gt;</span>
         <a th:href="@{/list{tid}_1_1/(tid=${goods.gtype.id})}" th:text="${goods.gtype.ttitle}"></a>
         <span>&gt;</span>
-        <span th:text="${goods.gtitle}"></span>
+        <span th:text="${goods.gtitle}" style="color:var(--gray-900);font-weight:500"></span>
     </div>
 
     <div class="goods_detail_con clearfix">
@@ -44,9 +44,9 @@
             <h3 th:text="${goods.gtitle}"></h3>
             <p>
                 卖家：<a th:href="@{/user/shoper_information/{gunit}/(gunit=${goods.gunit})}"
-                         th:text="${goods.gunit}" style="color:var(--gray-500);border-bottom:1px solid var(--gray-300)"></a>
+                         th:text="${goods.gunit}" style="color:var(--gray-500);border-bottom:1px solid var(--gray-300);padding-bottom:1px"></a>
             </p>
-            <p th:text="${goods.gjianjie}" style="color:var(--gray-500);margin-top:8px"></p>
+            <p th:text="${goods.gjianjie}" style="color:var(--gray-500);margin-top:8px;line-height:1.6"></p>
             <div class="prize_bar">
                 <span class="show_pirze">&yen; <em id="show_price" th:text="${goods.gprice}"></em></span>
                 <span class="show_unit">单位：件</span>

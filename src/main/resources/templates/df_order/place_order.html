@@ -18,8 +18,11 @@
 <body>
 <th:block layout:fragment="center_body">
 
-    <h3 class="common_title">确认收货地址</h3>
+    <div style="max-width:var(--max-w);margin:32px auto 0;padding:0 24px">
+        <h2 style="font-size:24px;font-weight:700;color:var(--gray-900);margin:0 0 24px;letter-spacing:-.3px">确认订单</h2>
+    </div>
 
+    <h3 class="common_title">收货地址</h3>
     <div class="common_list_con clearfix">
         <dl>
             <dt>寄送到：</dt>
@@ -46,7 +49,6 @@
     </div>
 
     <h3 class="common_title">商品列表</h3>
-
     <div class="common_list_con clearfix">
         <ul class="goods_list_th clearfix">
             <li class="col01">商品名称</li>
@@ -67,7 +69,6 @@
     </div>
 
     <h3 class="common_title">总金额结算</h3>
-
     <div class="common_list_con clearfix">
         <div class="settle_con">
             <div class="total_goods_count">共<em th:text="${#lists.size(carts)}"></em>件商品，总金额<b th:text="${total_price}"></b></div>

@@ -97,9 +97,9 @@
 </head>
 <body>
 <th:block layout:fragment="center_body">
-    <div style="max-width:var(--max-w);margin:24px auto 0;padding:0 24px">
-        <p style="font-size:12px;color:var(--gray-400);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px">Shopping Cart</p>
-        <div class="total_count" style="margin:0 0 16px;padding:0;font-size:14px;color:var(--gray-600)">共 <em th:text="${#lists.size(carts)}" style="font-weight:600;color:var(--gray-900)"></em> 件商品</div>
+    <div style="max-width:var(--max-w);margin:32px auto 0;padding:0 24px">
+        <h2 style="font-size:24px;font-weight:700;color:var(--gray-900);margin:0 0 4px;letter-spacing:-.3px">购物车</h2>
+        <div class="total_count" style="margin:0 0 20px;padding:0;font-size:14px;color:var(--gray-500)">共 <em th:text="${#lists.size(carts)}" style="font-weight:600;color:var(--gray-900)"></em> 件商品</div>
     </div>
 
     <ul class="cart_list_th clearfix" style="padding:0 24px">

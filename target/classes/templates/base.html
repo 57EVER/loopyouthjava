@@ -11,15 +11,15 @@
 
     <div class="header_con" id="header_con">
         <div class="header">
-            <div class="welcome">loop&middot;youth</div>
+            <a th:href="@{/}" class="welcome">LOOP&middot;YOUTH</a>
             <div class="fr">
                 <th:block th:if="${session.user_name != null}">
-                    <div class="login_btn fl" style="display: flex; align-items: center; gap: 8px; height: 100%;">
-                        <img th:src="@{/media/{logo}(logo=${user?.ulogo})}" alt="avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block; margin: 0;"/>
-                        <font th:text="${session.user_name}" style="font-size: 14px; line-height: 1;"></font>
+                    <div class="login_btn fl" style="display:flex;align-items:center;gap:10px;height:100%;">
+                        <img th:src="@{/media/{logo}(logo=${user?.ulogo})}" alt="avatar"/>
+                        <font th:text="${session.user_name}"></font>
                     </div>
-                    <div class="login_btn fl" style="display: flex; align-items: center; height: 100%;">
-                        <span style="margin: 0 10px;">|</span>
+                    <div class="login_btn fl" style="display:flex;align-items:center;height:100%;">
+                        <span>|</span>
                         <a th:href="@{/user/logout/}">退出</a>
                     </div>
                 </th:block>
@@ -53,7 +53,13 @@
                         } else {
                             location.href = '/search?q='+q+'&pindex=1'
                         }
-                    })
+                    });
+                    $('.input_text').keypress(function(e){
+                        if(e.which==13){
+                            e.preventDefault();
+                            $('.input_btn').click();
+                        }
+                    });
                 })
             </script>
             <input type="text" class="input_text fl" name="q" placeholder="搜索你需要的...">
