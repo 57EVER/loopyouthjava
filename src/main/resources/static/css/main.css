@@ -782,10 +782,10 @@ body { background: var(--white); color: var(--gray-900); font-size: 14px; }
 
 /* ---- RIGHT CONTENT PANEL ---- */
 .right_content {
-  flex: 1; min-height: 560px; background: var(--white);
+  flex: 1; background: var(--white);
   border: 1px solid var(--gray-200); border-radius: var(--radius-lg);
-  padding: 0; box-sizing: border-box; overflow: visible;
-  box-shadow: var(--shadow-sm);
+  padding: 0; box-sizing: border-box; overflow: hidden;
+  box-shadow: var(--shadow-sm); height: fit-content;
 }
 .uc-panel-header {
   padding: 24px 32px; border-bottom: 1px solid var(--gray-200);
