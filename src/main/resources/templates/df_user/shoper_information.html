@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="${name} + '的主页'">商家中心</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a1a;background:#fff;line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+.sp-header{border-bottom:1px solid #e5e5e5;background:#fff;position:sticky;top:0;z-index:100}
+.sp-header-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.sp-brand{font-size:16px;font-weight:700;color:#1a1a1a;letter-spacing:-.3px}
+.sp-nav{display:flex;gap:24px}
+.sp-nav a{font-size:14px;color:#737373;font-weight:500;transition:color .25s}
+.sp-nav a:hover{color:#000}
+
+.sp-hero{max-width:1200px;margin:48px auto;padding:0 24px;display:flex;gap:48px;align-items:flex-start}
+.sp-hero-info{flex:1}
+.sp-hero-info h1{font-size:32px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.sp-hero-info .sp-subtitle{font-size:14px;color:#a3a3a3;margin-bottom:32px}
+.sp-avatar{width:320px;height:320px;flex-shrink:0;border-radius:12px;overflow:hidden;border:1px solid #e5e5e5}
+.sp-avatar img{width:100%;height:100%;object-fit:cover;filter:grayscale(15%);transition:filter .4s}
+.sp-avatar:hover img{filter:grayscale(0%)}
+
+.sp-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid #e5e5e5;border-radius:8px;overflow:hidden}
+.sp-info-item{padding:16px 20px;border-bottom:1px solid #f5f5f5}
+.sp-info-item:nth-child(odd){border-right:1px solid #f5f5f5}
+.sp-info-item:nth-last-child(-n+2){border-bottom:none}
+.sp-info-label{font-size:11px;font-weight:600;color:#a3a3a3;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.sp-info-value{font-size:14px;color:#1a1a1a;font-weight:500}
+.sp-info-empty{color:#d4d4d4}
+
+.sp-contact{max-width:1200px;margin:64px auto;padding:0 24px}
+.sp-section-title{font-size:12px;font-weight:600;color:#a3a3a3;text-transform:uppercase;letter-spacing:2px;padding-bottom:16px;border-bottom:1px solid #e5e5e5;margin-bottom:32px}
+
+.sp-contact-grid{display:flex;gap:48px}
+.sp-contact-left{flex:1;display:flex;flex-direction:column;gap:24px}
+.sp-contact-card{padding:20px;border:1px solid #e5e5e5;border-radius:8px;transition:border-color .25s}
+.sp-contact-card:hover{border-color:#000}
+.sp-contact-card h4{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:6px}
+.sp-contact-card p{font-size:14px;color:#737373}
+
+.sp-contact-right{flex:1}
+.sp-contact-right form{display:flex;flex-direction:column;gap:12px}
+.sp-contact-right input[type="text"]{height:48px;border:1.5px solid #d4d4d4;border-radius:8px;padding:0 16px;font-size:14px;color:#1a1a1a;transition:border-color .25s}
+.sp-contact-right input[type="text"]:focus{border-color:#000;outline:none}
+.sp-contact-right textarea{height:120px;border:1.5px solid #d4d4d4;border-radius:8px;padding:12px 16px;font-size:14px;color:#1a1a1a;resize:vertical;font-family:inherit;transition:border-color .25s}
+.sp-contact-right textarea:focus{border-color:#000;outline:none}
+.sp-contact-right input[type="submit"]{height:48px;background:#000;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:background .25s}
+.sp-contact-right input[type="submit"]:hover{background:#2d2d2d}
+
+.sp-footer{border-top:1px solid #e5e5e5;margin-top:80px;padding:32px 0;text-align:center}
+.sp-footer p{font-size:12px;color:#a3a3a3;letter-spacing:.5px}
+
+@media(max-width:768px){
+  .sp-hero{flex-direction:column-reverse;gap:24px}
+  .sp-avatar{width:100%;height:240px}
+  .sp-info-grid{grid-template-columns:1fr}
+  .sp-info-item{border-right:none !important}
+  .sp-contact-grid{flex-direction:column;gap:32px}
+}
+</style>
+<script src="/static/asserts/js/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="sp-header">
+    <div class="sp-header-inner">
+        <a th:href="@{/}" class="sp-brand">loop&middot;youth</a>
+        <nav class="sp-nav">
+            <a th:href="@{/user/info/}">返回用户中心</a>
+            <a href="#contact">联系TA</a>
+        </nav>
+    </div>
+</div>
+
+<div class="sp-hero">
+    <div class="sp-hero-info">
+        <h1>Hi!</h1>
+        <p class="sp-subtitle"><span th:text="${user.uname}"></span>，这是我的资料</p>
+        <div class="sp-info-grid">
+            <div class="sp-info-item">
+                <div class="sp-info-label">用户名</div>
+                <div class="sp-info-value" th:text="${shoper.uname}"></div>
+            </div>
+            <div class="sp-info-item">
+                <div class="sp-info-label">性别</div>
+                <div class="sp-info-value">
+                    <span th:if="${shoper.usex}" th:text="${shoper.usex}"></span>
+                    <span th:unless="${shoper.usex}" class="sp-info-empty">暂无填写</span>
+                </div>
+            </div>
+            <div class="sp-info-item">
+                <div class="sp-info-label">年龄</div>
+                <div class="sp-info-value">
+                    <span th:if="${shoper.uage}" th:text="${shoper.uage}"></span>
+                    <span th:unless="${shoper.uage}" class="sp-info-empty">暂无填写</span>
+                </div>
+            </div>
+            <div class="sp-info-item">
+                <div class="sp-info-label">发货地址</div>
+                <div class="sp-info-value">
+                    <span th:if="${shoper.uaddress}" th:text="${shoper.uaddress}"></span>
+                    <span th:unless="${shoper.uaddress}" class="sp-info-empty">暂无填写</span>
+                </div>
+            </div>
+            <div class="sp-info-item">
+                <div class="sp-info-label">邮箱</div>
+                <div class="sp-info-value">
+                    <span th:if="${shoper.uemail}" th:text="${shoper.uemail}"></span>
+                    <span th:unless="${shoper.uemail}" class="sp-info-empty">暂无填写</span>
+                </div>
+            </div>
+            <div class="sp-info-item">
+                <div class="sp-info-label">联系方式</div>
+                <div class="sp-info-value">
+                    <span th:if="${shoper.uphone}" th:text="${shoper.uphone}"></span>
+                    <span th:unless="${shoper.uphone}" class="sp-info-empty">暂无填写</span>
+                </div>
+            </div>
+            <div class="sp-info-item" style="grid-column:1/-1;border-right:none">
+                <div class="sp-info-label">个性宣言</div>
+                <div class="sp-info-value">
+                    <span th:if="${shoper.upersonInf}" th:text="${shoper.upersonInf}"></span>
+                    <span th:unless="${shoper.upersonInf}" class="sp-info-empty">暂无填写</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sp-avatar">
+        <img th:src="@{/media/{logo}(logo=${shoper.ulogo})}" alt="">
+    </div>
+</div>
+
+<div class="sp-contact" id="contact">
+    <div class="sp-section-title">Contact</div>
+    <div class="sp-contact-grid">
+        <div class="sp-contact-left">
+            <div class="sp-contact-card">
+                <h4>邮箱联系</h4>
+                <p><a href="mailto:" th:text="${shoper.uemail}"></a></p>
+            </div>
+            <div class="sp-contact-card">
+                <h4>电话联系</h4>
+                <p th:text="${shoper.uphone}"></p>
+            </div>
+            <div class="sp-contact-card">
+                <h4>发货地址</h4>
+                <p>地址：<span th:text="${shoper.uaddress}"></span></p>
+                <p>收件人：<span th:text="${shoper.ushou}"></span></p>
+            </div>
+        </div>
+        <div class="sp-contact-right">
+            <form th:if="${name}" th:action="@{/user/shoper_information/{n}/(n=${name})}" method="post">
+                <input type="text" name="title" required="" placeholder="商品名称">
+                <textarea name="Message" required="" placeholder="想了解什么？发消息给我吧..."></textarea>
+                <input type="submit" value="发送消息">
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="sp-footer">
+    <p>CAMPUS TRADING COMMUNITY</p>
+</div>
+
+<div th:if="${message}">
+    <script th:inline="javascript">
+        var msg = [[${message}]];
+        alert(msg);
+    </script>
+</div>
+</body>
+</html>

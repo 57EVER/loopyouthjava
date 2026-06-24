@@ -1,0 +1,69 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <th:block layout:fragment="head"></th:block>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="adm_card">
+        <div class="adm_table_wrap">
+            <table class="adm_table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>评论者</th>
+                        <th>商品</th>
+                        <th>内容</th>
+                        <th>时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${comments.content}" th:classappend="${c.isDelete ? 'adm_row_deleted' : ''}">
+                        <td th:text="${c.id}"></td>
+                        <td th:text="${c.cusername}"></td>
+                        <td th:text="${c.cgoodsname.gtitle}"></td>
+                        <td class="adm_cell_content" th:text="${c.cuserContent}"></td>
+                        <td th:text="${#temporals.format(c.datePublish, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td>
+                            <span class="adm_badge" th:classappend="${c.isDelete ? 'adm_badge_red' : 'adm_badge_green'}"
+                                  th:text="${c.isDelete ? '已删除' : '正常'}"></span>
+                        </td>
+                        <td class="adm_actions">
+                            <a th:href="@{/detail/{id}/(id=${c.cgoodsname.id})}" class="adm_btn adm_btn_sm" target="_blank">查看商品</a>
+                            <button class="adm_btn adm_btn_sm adm_btn_danger"
+                                    th:unless="${c.isDelete}"
+                                    th:attr="onclick='deleteComment('+${c.id}+')'">删除</button>
+                        </td>
+                    </tr>
+                    <tr th:if="${comments.content.isEmpty()}">
+                        <td colspan="7" class="adm_empty">暂无数据</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="adm_pagination" th:if="${comments.totalPages > 1}">
+            <a th:href="@{/admin/comments(page=${comments.number - 1})}"
+               th:if="${comments.number > 0}" class="adm_btn adm_btn_sm">上一页</a>
+            <span class="adm_page_info"
+                  th:text="'第 ' + ${comments.number + 1} + ' / ' + ${comments.totalPages} + ' 页'"></span>
+            <a th:href="@{/admin/comments(page=${comments.number + 1})}"
+               th:if="${comments.number + 1 < comments.totalPages}" class="adm_btn adm_btn_sm">下一页</a>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="scripts">
+<script>
+function deleteComment(id) {
+    if (confirm('确定删除该评论？')) {
+        $.post('/admin/comments/' + id + '/delete', function() { location.reload(); });
+    }
+}
+</script>
+</th:block>
+</body>
+</html>

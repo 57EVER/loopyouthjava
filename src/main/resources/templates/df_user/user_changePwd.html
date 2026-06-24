@@ -1,0 +1,37 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<body>
+<th:block layout:fragment="center_body">
+    <div class="main_con clearfix">
+        <div class="left_menu_con clearfix">
+            <h3>USER CENTER</h3>
+            <div class="information clearfix">
+                <a th:href="@{/user/myself_information/}"><img th:src="@{/media/{logo}(logo=${user.ulogo})}" alt=""></a>
+            </div>
+            <ul>
+                <li><a th:href="@{/user/info/}">个人信息</a></li>
+                <li><a th:href="@{/user/publishers/}">发布商品</a></li>
+                <li><a th:href="@{/user/changeInformation/}">修改资料</a></li>
+                <li><a th:href="@{/user/changeInPwd/}" class="active">修改密码</a></li>
+                <li><a th:href="@{/user/order/1}">全部订单</a></li>
+                <li><a th:href="@{/user/site/}">收货地址</a></li>
+            </ul>
+        </div>
+        <div class="right_content clearfix">
+            <h3 class="common_title2">修改密码</h3>
+            <div class="site_con">
+                <form th:action="@{/user/changeInPwd/}" method="post">
+                    <div class="form_group_logo"><img th:src="@{/media/{logo}(logo=${user.ulogo})}" alt=""></div>
+                    <div class="form_group"><label>新密码：</label><input type="password" name="password"></div>
+                    <div class="form_group"><label>确认密码：</label><input type="password" name="password2"></div>
+                    <input type="submit" value="保存" class="info_submit">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div th:if="${message}"><script th:inline="javascript">alert(/*[[${message}]]*/ '');</script></div>
+</th:block>
+</body>
+</html>

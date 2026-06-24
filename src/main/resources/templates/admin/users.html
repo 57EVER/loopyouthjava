@@ -1,0 +1,94 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <th:block layout:fragment="head"></th:block>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="adm_toolbar">
+        <form th:action="@{/admin/users}" method="get" class="adm_search_form">
+            <input type="text" name="q" th:value="${q}" placeholder="搜索用户名或邮箱..." class="adm_search_input">
+            <button type="submit" class="adm_btn adm_btn_primary">搜索</button>
+            <a th:href="@{/admin/users}" class="adm_btn" th:if="${q != null}">清除</a>
+        </form>
+    </div>
+
+    <div class="adm_card">
+        <div class="adm_table_wrap">
+            <table class="adm_table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>头像</th>
+                        <th>用户名</th>
+                        <th>邮箱</th>
+                        <th>性别</th>
+                        <th>认证</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="u : ${users.content}">
+                        <td th:text="${u.id}"></td>
+                        <td>
+                            <img th:src="@{/media/{logo}(logo=${u.ulogo})}" class="adm_avatar" alt="">
+                        </td>
+                        <td th:text="${u.uname}"></td>
+                        <td th:text="${u.uemail}"></td>
+                        <td th:text="${u.usex != '' ? u.usex : '-'}"></td>
+                        <td>
+                            <span class="adm_badge" th:classappend="${u.ucheckPassOrfail ? 'adm_badge_green' : 'adm_badge_gray'}"
+                                  th:text="${u.ucheckPassOrfail ? '已认证' : '未认证'}"></span>
+                        </td>
+                        <td>
+                            <span class="adm_badge" th:classappend="${u.unamePassOrfail ? 'adm_badge_green' : 'adm_badge_red'}"
+                                  th:text="${u.unamePassOrfail ? '正常' : '封禁'}"></span>
+                        </td>
+                        <td class="adm_actions">
+                            <button class="adm_btn adm_btn_sm"
+                                    th:attr="onclick='toggleBan('+${u.id}+')'"
+                                    th:text="${u.unamePassOrfail ? '封禁' : '解封'}"></button>
+                            <button class="adm_btn adm_btn_sm"
+                                    th:attr="onclick='toggleVerify('+${u.id}+')'"
+                                    th:text="${u.ucheckPassOrfail ? '取消认证' : '认证'}"></button>
+                            <button class="adm_btn adm_btn_sm adm_btn_danger"
+                                    th:attr="onclick='deleteUser('+${u.id}+')'">删除</button>
+                        </td>
+                    </tr>
+                    <tr th:if="${users.content.isEmpty()}">
+                        <td colspan="8" class="adm_empty">暂无数据</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="adm_pagination" th:if="${users.totalPages > 1}">
+            <a th:href="@{/admin/users(page=${users.number - 1}, q=${q})}"
+               th:if="${users.number > 0}" class="adm_btn adm_btn_sm">上一页</a>
+            <span class="adm_page_info"
+                  th:text="'第 ' + ${users.number + 1} + ' / ' + ${users.totalPages} + ' 页'"></span>
+            <a th:href="@{/admin/users(page=${users.number + 1}, q=${q})}"
+               th:if="${users.number + 1 < users.totalPages}" class="adm_btn adm_btn_sm">下一页</a>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="scripts">
+<script>
+function toggleBan(id) {
+    $.post('/admin/users/' + id + '/toggleBan', function() { location.reload(); });
+}
+function toggleVerify(id) {
+    $.post('/admin/users/' + id + '/toggleVerify', function() { location.reload(); });
+}
+function deleteUser(id) {
+    if (confirm('确定删除该用户？此操作不可恢复！')) {
+        $.post('/admin/users/' + id + '/delete', function() { location.reload(); });
+    }
+}
+</script>
+</th:block>
+</body>
+</html>

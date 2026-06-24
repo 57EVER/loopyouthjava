@@ -1,0 +1,230 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{df_goods/base}">
+<head>
+<th:block layout:fragment="head">
+    <script type="text/javascript">
+        function plus() {
+            var num = parseInt($('#num_show').val());
+            var stock = parseInt($('#stock').text());
+            if (num < stock) {
+                $('#num_show').val(num + 1);
+                var price = parseFloat($('#show_price').text());
+                $('#show_total').text(((num + 1) * price).toFixed(2));
+            }
+        }
+        function minus() {
+            var num = parseInt($('#num_show').val());
+            if (num > 1) {
+                $('#num_show').val(num - 1);
+                var price = parseFloat($('#show_price').text());
+                $('#show_total').text(((num - 1) * price).toFixed(2));
+            }
+        }
+    </script>
+    <style>
+        .reply_popup {
+            display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+            background:var(--white); border:1px solid var(--gray-200); padding:24px;
+            z-index:1000; box-shadow:var(--shadow-lg); border-radius:var(--radius-md); width:400px;
+        }
+        .reply_popup .close_btn { float:right; cursor:pointer; font-size:18px; color:var(--gray-400); }
+        .reply_popup .close_btn:hover { color:var(--black); }
+        .reply_popup h4 { font-size:16px; font-weight:600; margin-bottom:12px; }
+        .reply_popup textarea { width:100%; border:1.5px solid var(--gray-300); border-radius:var(--radius-sm); padding:10px; font-size:14px; resize:vertical; }
+        .reply_popup textarea:focus { border-color:var(--black); outline:none; }
+        .reply_popup .submit_btn { margin-top:10px; padding:8px 24px; background:var(--black); color:var(--white); border-radius:var(--radius-sm); cursor:pointer; font-weight:500; }
+        .reply_overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.3); z-index:999; }
+        .comment_item { padding:16px 0; border-bottom:1px solid var(--gray-100); display:flex; gap:12px; }
+        .comment_avatar img { width:40px; height:40px; border-radius:50%; object-fit:cover; }
+        .comment_info { flex:1; }
+        .comment_user { font-size:13px; color:var(--gray-500); margin-bottom:4px; }
+        .comment_user span:first-child { font-weight:600; color:var(--gray-800); margin-right:8px; }
+        .comment_date { color:var(--gray-400); font-size:12px; }
+        .comment_content { font-size:14px; color:var(--gray-700); line-height:1.6; }
+        .comment_pic img { max-width:200px; border-radius:var(--radius-sm); margin-top:8px; }
+        .comment_reply { background:var(--gray-50); padding:10px; border-radius:var(--radius-sm); margin-top:8px; font-size:13px; }
+        .reply_item { margin-bottom:4px; color:var(--gray-600); }
+        .reply_user { font-weight:600; color:var(--gray-800); }
+        .reply_date { color:var(--gray-400); font-size:12px; margin-left:8px; }
+        .comment_form { margin-top:24px; padding:20px; background:var(--gray-50); border-radius:var(--radius-md); }
+        .comment_form .form_group { margin-bottom:12px; }
+        .comment_form label { display:block; font-size:13px; color:var(--gray-500); margin-bottom:4px; font-weight:500; }
+        .comment_form textarea { width:100%; border:1.5px solid var(--gray-300); border-radius:var(--radius-sm); padding:10px; font-size:14px; resize:vertical; }
+        .comment_form textarea:focus { border-color:var(--black); outline:none; }
+        .comment_form .submit_btn { padding:8px 24px; background:var(--black); color:var(--white); border-radius:var(--radius-sm); cursor:pointer; font-weight:500; font-size:14px; }
+    </style>
+</th:block>
+</head>
+<body>
+<th:block layout:fragment="center_content">
+
+    <div class="breadcrumb">
+        <a th:href="@{/}">全部分类</a>
+        <span>&gt;</span>
+        <a th:href="@{/list{tid}_1_1/(tid=${goods.gtype.id})}" th:text="${goods.gtype.ttitle}"></a>
+        <span>&gt;</span>
+        <a th:href="@{/detail/{id}/(id=${goods.id})}" th:text="${goods.gtitle}"></a>
+        <span>&gt;</span>
+        <span>评论</span>
+    </div>
+
+    <div class="goods_detail_con clearfix">
+        <div class="goods_detail_pic fl">
+            <img th:src="@{/media/{pic}(pic=${goods.gpic})}">
+        </div>
+        <div class="goods_detail_list fr">
+            <h3 th:text="${goods.gtitle}"></h3>
+            <p>卖家：<a th:href="@{/user/shoper_information/{gunit}/(gunit=${goods.gunit})}" th:text="${goods.gunit}" style="color:var(--gray-500);border-bottom:1px solid var(--gray-300)"></a></p>
+            <p th:text="${goods.gjianjie}" style="color:var(--gray-500);margin-top:8px"></p>
+            <div class="prize_bar">
+                <span class="show_pirze">&yen; <em id="show_price" th:text="${goods.gprice}"></em></span>
+                <span class="show_unit">单位：件</span>
+                <span style="margin-left:24px;color:var(--gray-400)">库存：<em id="stock" th:text="${goods.gkucun}"></em></span>
+            </div>
+            <div class="goods_num">
+                <span class="num_name">数量</span>
+                <div class="num_add">
+                    <div class="minus" onclick="minus();">-</div>
+                    <input type="text" id="num_show" value="1">
+                    <div class="add" onclick="plus();">+</div>
+                </div>
+            </div>
+            <div class="total">总价：&yen; <em id="show_total" th:text="${goods.gprice}"></em></div>
+            <div class="operate_btn">
+                <th:block th:if="${session.user_name != null}">
+                    <a href="javascript:;" class="buy_btn" id="buy_now">立即购买</a>
+                    <a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
+                </th:block>
+                <th:block th:unless="${session.user_name != null}">
+                    <a th:href="@{/user/login/}" class="buy_btn">立即购买</a>
+                    <a th:href="@{/user/login/}" class="add_cart">加入购物车</a>
+                </th:block>
+            </div>
+        </div>
+    </div>
+
+    <div class="main_wrap clearfix">
+        <div class="l_wrap fl">
+            <div class="new_goods">
+                <h3>NEW</h3>
+                <ul>
+                    <li th:each="item : ${news}">
+                        <a th:href="@{/detail/{id}/(id=${item.id})}"><img th:src="@{/media/{pic}(pic=${item.gpic})}"></a>
+                        <h4><a th:href="@{/detail/{id}/(id=${item.id})}" th:text="${item.gtitle}"></a></h4>
+                        <div class="prize">&yen;<span th:text="${item.gprice}"></span></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="r_wrap fr">
+            <ul class="detail_tab clearfix">
+                <li><a th:href="@{/detail/{id}/(id=${goods.id})}">商品介绍</a></li>
+                <li class="active"><a href="javascript:;">评论</a></li>
+            </ul>
+            <div class="tab_content">
+                <div class="comment_list">
+                    <th:block th:each="comment : ${page.content}">
+                        <div class="comment_item clearfix">
+                            <div class="comment_avatar fl">
+                                <img th:src="@{/media/{logo}(logo=${comment.clogo})}" alt="">
+                            </div>
+                            <div class="comment_info fr">
+                                <p class="comment_user">
+                                    <span th:text="${comment.cusername}"></span>
+                                    <span class="comment_date" th:text="${#temporals.format(comment.datePublish, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                                </p>
+                                <p class="comment_content" th:text="${comment.cuserContent}"></p>
+                                <div class="comment_pic" th:if="${comment.cpic != null && !comment.cpic.isEmpty()}">
+                                    <img th:src="@{/media/{pic}(pic=${comment.cpic})}">
+                                </div>
+                                <div class="comment_reply" th:if="${comment.replyList != null && !comment.replyList.isEmpty()}">
+                                    <div class="reply_item" th:each="reply : ${comment.replyList}">
+                                        <span class="reply_user" th:text="${reply.cusername}"></span>
+                                        <span>回复</span>
+                                        <span th:text="${reply.cusername1}"></span>:
+                                        <span th:text="${reply.ccontentChart}"></span>
+                                        <span class="reply_date" th:text="${#temporals.format(reply.datePublish, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+
+                <div class="pagenation" th:if="${page.totalPages > 1}">
+                    <a th:if="${page.hasPrevious()}" th:href="@{/content/{gid}/{pindex}/(gid=${goods.id},pindex=${page.number})}">&larr; 上一页</a>
+                    <th:block th:each="pnum : ${#numbers.sequence(1, page.totalPages)}">
+                        <a th:href="@{/content/{gid}/{pindex}/(gid=${goods.id},pindex=${pnum})}" th:text="${pnum}" th:classappend="${pnum == page.number + 1} ? 'active' : ''"></a>
+                    </th:block>
+                    <a th:if="${page.hasNext()}" th:href="@{/content/{gid}/{pindex}/(gid=${goods.id},pindex=${page.number + 2})}">下一页 &rarr;</a>
+                </div>
+
+                <th:block th:if="${session.user_name != null}">
+                    <div class="comment_form" th:if="${goodsOrderDetailInfos != null}" th:with="hasBought=${false}">
+                        <th:block th:each="detail : ${goodsOrderDetailInfos}">
+                            <th:block th:if="${detail.goods.id == goods.id && detail.username == session.user_name}"></th:block>
+                        </th:block>
+                        <form th:action="@{/content/{gid}/1/(gid=${goods.id})}" method="post" enctype="multipart/form-data">
+                            <div class="form_group">
+                                <label>上传图片</label>
+                                <input type="file" name="pic" accept="image/*">
+                            </div>
+                            <div class="form_group">
+                                <label>评论内容</label>
+                                <textarea name="text" rows="4" placeholder="写下你的评论..."></textarea>
+                            </div>
+                            <div class="form_group">
+                                <input type="submit" value="提交评论" class="submit_btn">
+                            </div>
+                        </form>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+
+    <div class="reply_overlay" id="reply_overlay" onclick="closeReply();"></div>
+    <div class="reply_popup" id="reply_popup">
+        <span class="close_btn" onclick="closeReply();">&times;</span>
+        <h4>回复评论</h4>
+        <form id="reply_form" method="post">
+            <textarea name="reply_content" rows="3" placeholder="写下你的回复..."></textarea>
+            <input type="submit" value="回复" class="submit_btn">
+        </form>
+    </div>
+
+    <script type="text/javascript" th:if="${message != null}">alert('[[${message}]]');</script>
+
+    <script type="text/javascript">
+        function openReply(commentId) { $('#reply_overlay').show(); $('#reply_popup').show(); $('#reply_form').attr('action', '/reply/' + commentId + '/'); }
+        function closeReply() { $('#reply_overlay').hide(); $('#reply_popup').hide(); }
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            var $add_x = $('#add_cart').offset() ? $('#add_cart').offset().left : 0;
+            var $add_y = $('#add_cart').offset() ? $('#add_cart').offset().top : 0;
+            $('#add_cart').click(function () {
+                var num = $('#num_show').val();
+                var goodsId = [[${goods.id}]];
+                $.get('/cart/add' + goodsId + '_' + num + '/', function (data) {
+                    $(".add_jump").css({'left': $add_x + 80, 'top': $add_y + 10, 'display': 'block'});
+                    $(".add_jump").stop().animate({'left': $add_x + 400, 'top': $add_y - 200}, "fast", function () {
+                        $(".add_jump").fadeOut('fast', function () { if (typeof data === 'object') { $('#show_count').html(data.count); } });
+                    });
+                });
+            });
+            $('#buy_now').click(function () {
+                var num = $('#num_show').val();
+                var goodsId = [[${goods.id}]];
+                $.get('/cart/add' + goodsId + '_' + num + '/', function () { location.href = '/cart/'; });
+            });
+        });
+    </script>
+    <div class="add_jump" style="display:none;">+1</div>
+
+</th:block>
+</body>
+</html>

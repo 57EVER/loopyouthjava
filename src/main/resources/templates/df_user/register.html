@@ -1,0 +1,151 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base_foot}">
+<head>
+<th:block layout:fragment="head">
+    <script type="text/javascript">
+    $(function(){
+        var error_name = false, error_password = false, error_check_password = false, error_email = false, error_check = false;
+
+        $('#user_name').blur(function() { check_user_name(); });
+        $('#pwd').blur(function() { check_pwd(); });
+        $('#cpwd').blur(function() { check_cpwd(); });
+        $('#email').blur(function() { check_email(); });
+
+        $('#allow').click(function() {
+            if($(this).is(':checked')){ error_check = false; $('.allow_error').hide(); }
+            else { error_check = true; $('.allow_error').html('请同意使用协议').show(); }
+        });
+
+        function check_user_name(){
+            var len = $('#user_name').val().length;
+            if(len<5||len>20){ $('#user_name').siblings('.field_error').html('请输入5-20个字符').show(); error_name = true; }
+            else {
+                $.get('/user/register_exist/?uname='+$('#user_name').val(),function(data){
+                    if (data.count >= 1) { $('#user_name').siblings('.field_error').html('用户名已存在').show(); error_name = true; }
+                    else { $('#user_name').siblings('.field_error').hide(); error_name = false; }
+                });
+            }
+        }
+        function check_pwd(){
+            var len = $('#pwd').val().length;
+            if(len<4||len>20){ $('#pwd').siblings('.field_error').html('密码需要4-20位').show(); error_password = true; }
+            else { $('#pwd').siblings('.field_error').hide(); error_password = false; }
+        }
+        function check_cpwd(){
+            if($('#pwd').val()!=$('#cpwd').val()){ $('#cpwd').siblings('.field_error').html('两次密码不一致').show(); error_check_password = true; }
+            else { $('#cpwd').siblings('.field_error').hide(); error_check_password = false; }
+        }
+        function check_email(){
+            var re = /^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$/;
+            if(!re.test($('#email').val())){ $('#email').siblings('.field_error').html('邮箱格式不正确').show(); error_email = true; }
+            else {
+                $.get('/user/register_exist/?uemail='+$('#email').val(),function(data){
+                    if (data.email_count >= 1) { $('#email').siblings('.field_error').html('邮箱已存在').show(); error_email = true; }
+                    else { $('#email').siblings('.field_error').hide(); error_email = false; }
+                });
+            }
+        }
+        $('#reg_form').submit(function() {
+            check_user_name(); check_pwd(); check_cpwd(); check_email();
+            return !(error_name || error_password || error_check_password || error_email || error_check);
+        });
+    });
+    </script>
+</th:block>
+</head>
+<body>
+<th:block layout:fragment="body">
+
+    <!-- Agreement Modal -->
+    <div class="reg_modal_overlay" id="shadow">
+        <div class="reg_modal_card">
+            <div class="reg_modal_header">
+                <h3>使用协议</h3>
+                <span class="reg_modal_close" id="closeModal">&times;</span>
+            </div>
+            <div class="reg_modal_body">
+                <p><strong>一、甲方权利</strong></p>
+                <p>甲方在乙方举办的活动中，可带入自己的物资；甲方可以合理要求乙方协助现场实践。</p>
+                <p><strong>二、甲方义务</strong></p>
+                <p>甲方所提供的物资，食品饮料类必须在保质期内，电器电子物品必须有三包等，如有发现将取消参赛资格。售出物资出现质量、安全、保修等问题，纠纷与乙方无关。</p>
+                <p><strong>三、乙方权利</strong></p>
+                <p>乙方拥有本次活动全程解析权和组织权；甲方如有违反活动规则，乙方有权取消甲方的活动资格。</p>
+                <p><strong>四、乙方义务</strong></p>
+                <p>乙方有义务给甲方宣传本次活动；乙方应准备好现场、活动时间，保证公平公正。</p>
+                <p><strong>五、争议处理</strong></p>
+                <p>甲乙双方在出现违约或其它争议时，应本着友好协商、解决矛盾的原则来处理。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="new_login_container">
+        <div class="login_split_left">
+            <img src="/static/images/image copy.png" alt="loop-youth">
+        </div>
+        <div class="login_split_right">
+            <div class="back_home_link">
+                <a th:href="@{/}">&larr; 返回首页</a>
+            </div>
+            <div class="login_form_container reg_form_container">
+                <div class="login_header_text">
+                    <h1>注册</h1>
+                    <a th:href="@{/user/login/}" class="register_link_top">已有账号? 登录</a>
+                </div>
+                <form th:action="@{/user/register_handle/}" id="reg_form" method="post" class="new_login_form">
+                    <div class="input_group">
+                        <input type="text" name="user_name" id="user_name" placeholder="用户名 (5-20个字符)">
+                        <div class="field_error">提示信息</div>
+                    </div>
+                    <div class="input_group">
+                        <input type="password" name="pwd" id="pwd" placeholder="密码 (4-20位)">
+                        <div class="field_error">提示信息</div>
+                    </div>
+                    <div class="input_group">
+                        <input type="password" name="confirm_pwd" id="cpwd" placeholder="确认密码">
+                        <div class="field_error">提示信息</div>
+                    </div>
+                    <div class="input_group">
+                        <input type="text" name="email" id="email" placeholder="邮箱">
+                        <div class="field_error">提示信息</div>
+                    </div>
+                    <div class="input_group">
+                        <input type="text" id="student_id" placeholder="学号 (选填)">
+                    </div>
+                    <div class="checkbox_group">
+                        <label>
+                            <input type="checkbox" name="allow" id="allow" checked="checked">
+                            <span>同意 <a href="javascript:void(0)" class="agreement_link" id="openModal">《使用协议》</a></span>
+                        </label>
+                        <div class="field_error allow_error">提示信息</div>
+                    </div>
+                    <button type="submit" class="submit_button">注册</button>
+                    <div class="form_bottom_link">
+                        <span>已有账号?</span>
+                        <a th:href="@{/user/login/}">去登录</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    $(function(){
+        $('#openModal, .agreement_link').click(function(e){
+            e.preventDefault();
+            $('#shadow').addClass('reg_modal_visible');
+        });
+        $('#closeModal').click(function(){
+            $('#shadow').removeClass('reg_modal_visible');
+        });
+        $('#shadow').click(function(e){
+            if($(e.target).hasClass('reg_modal_overlay')){
+                $(this).removeClass('reg_modal_visible');
+            }
+        });
+    });
+</script>
+</th:block>
+</body>
+</html>

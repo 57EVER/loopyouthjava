@@ -1,0 +1,44 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<body>
+<th:block layout:fragment="center_body">
+    <div class="main_con clearfix">
+        <div class="left_menu_con clearfix">
+            <h3>USER CENTER</h3>
+            <div class="information clearfix">
+                <a th:href="@{/user/myself_information/}"><img th:src="@{/media/{logo}(logo=${user.ulogo})}" alt=""></a>
+            </div>
+            <ul>
+                <li><a th:href="@{/user/info/}">个人信息</a></li>
+                <li><a th:href="@{/user/publishers/}">发布商品</a></li>
+                <li><a th:href="@{/user/changeInformation/}" class="active">修改资料</a></li>
+                <li><a th:href="@{/user/changeInPwd/}">修改密码</a></li>
+                <li><a th:href="@{/user/order/1}">全部订单</a></li>
+                <li><a th:href="@{/user/site/}">收货地址</a></li>
+            </ul>
+        </div>
+        <div class="right_content clearfix">
+            <h3 class="common_title2">修改资料</h3>
+            <div class="site_con">
+                <form th:action="@{/user/changeInformation/}" method="post" enctype="multipart/form-data">
+                    <div class="form_group_logo"><img th:src="@{/media/{logo}(logo=${user.ulogo})}" alt=""></div>
+                    <div class="form_group"><label>头像：</label><input type="file" name="logo"></div>
+                    <div class="form_group"><label>用户名：</label><span th:text="${user.uname}" style="line-height:40px"></span></div>
+                    <div class="form_group"><label>性别：</label>
+                        <select name="sex" style="height:32px;border:1px solid var(--gray-300);border-radius:4px;padding:0 8px">
+                            <option value="男">男</option><option value="女">女</option>
+                        </select>
+                    </div>
+                    <div class="form_group"><label>年龄：</label><input type="text" name="age" th:value="${user.uage}"></div>
+                    <div class="form_group form_group2"><label>个人简介：</label><textarea class="site_area" name="personinf" th:text="${user.upersonInf}"></textarea></div>
+                    <input type="submit" value="保存" class="info_submit">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div th:if="${message}"><script th:inline="javascript">alert(/*[[${message}]]*/ '');</script></div>
+</th:block>
+</body>
+</html>

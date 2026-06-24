@@ -1,0 +1,67 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'管理后台 - ' + ${title}">管理后台</title>
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <script src="/static/js/jquery-1.12.4.min.js"></script>
+    <th:block layout:fragment="head"></th:block>
+</head>
+<body>
+<div class="adm_layout">
+    <!-- Sidebar -->
+    <aside class="adm_sidebar">
+        <div class="adm_sidebar_brand">
+            <span class="adm_brand_icon">&#9881;</span>
+            <span class="adm_brand_text">管理后台</span>
+        </div>
+        <nav class="adm_nav">
+            <a th:href="@{/admin/}" class="adm_nav_item" th:classappend="${#strings.equals(title, '管理后台')} ? 'active' : ''">
+                <span class="adm_nav_icon">&#9632;</span>
+                <span>数据概览</span>
+            </a>
+            <a th:href="@{/admin/users}" class="adm_nav_item" th:classappend="${#strings.equals(title, '用户管理')} ? 'active' : ''">
+                <span class="adm_nav_icon">&#9786;</span>
+                <span>用户管理</span>
+            </a>
+            <a th:href="@{/admin/goods}" class="adm_nav_item" th:classappend="${#strings.equals(title, '商品管理')} ? 'active' : ''">
+                <span class="adm_nav_icon">&#9733;</span>
+                <span>商品管理</span>
+            </a>
+            <a th:href="@{/admin/orders}" class="adm_nav_item" th:classappend="${#strings.equals(title, '订单管理')} ? 'active' : ''">
+                <span class="adm_nav_icon">&#9997;</span>
+                <span>订单管理</span>
+            </a>
+            <a th:href="@{/admin/comments}" class="adm_nav_item" th:classappend="${#strings.equals(title, '评论管理')} ? 'active' : ''">
+                <span class="adm_nav_icon">&#9993;</span>
+                <span>评论管理</span>
+            </a>
+        </nav>
+        <div class="adm_sidebar_footer">
+            <a th:href="@{/}" class="adm_nav_item">
+                <span class="adm_nav_icon">&larr;</span>
+                <span>返回前台</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="adm_main">
+        <header class="adm_topbar">
+            <h2 th:text="${title}">页面标题</h2>
+            <div class="adm_topbar_right">
+                <span th:text="${session.admin_name}">admin</span>
+                <a th:href="@{/admin/logout}" class="adm_logout_btn">退出</a>
+            </div>
+        </header>
+        <div class="adm_content">
+            <th:block layout:fragment="content"></th:block>
+        </div>
+    </main>
+</div>
+<th:block layout:fragment="scripts"></th:block>
+</body>
+</html>

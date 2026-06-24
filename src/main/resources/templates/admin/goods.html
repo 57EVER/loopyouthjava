@@ -1,0 +1,81 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <th:block layout:fragment="head"></th:block>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="adm_toolbar">
+        <form th:action="@{/admin/goods}" method="get" class="adm_search_form">
+            <input type="text" name="q" th:value="${q}" placeholder="搜索商品名称或卖家..." class="adm_search_input">
+            <button type="submit" class="adm_btn adm_btn_primary">搜索</button>
+            <a th:href="@{/admin/goods}" class="adm_btn" th:if="${q != null}">清除</a>
+        </form>
+    </div>
+
+    <div class="adm_card">
+        <div class="adm_table_wrap">
+            <table class="adm_table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>图片</th>
+                        <th>商品名称</th>
+                        <th>价格</th>
+                        <th>库存</th>
+                        <th>卖家</th>
+                        <th>点击量</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="g : ${goods.content}" th:classappend="${g.isDelete ? 'adm_row_deleted' : ''}">
+                        <td th:text="${g.id}"></td>
+                        <td>
+                            <img th:src="@{/media/{pic}(pic=${g.gpic})}" class="adm_thumb" alt="">
+                        </td>
+                        <td>
+                            <span th:text="${g.gtitle}"></span>
+                            <span class="adm_badge adm_badge_red" th:if="${g.isDelete}" style="margin-left:6px">已删除</span>
+                        </td>
+                        <td th:text="'¥' + ${g.gprice}"></td>
+                        <td th:text="${g.gkucun}"></td>
+                        <td th:text="${g.gunit}"></td>
+                        <td th:text="${g.gclick}"></td>
+                        <td class="adm_actions">
+                            <a th:href="@{/detail/{id}/(id=${g.id})}" class="adm_btn adm_btn_sm" target="_blank">查看</a>
+                            <button class="adm_btn adm_btn_sm adm_btn_danger"
+                                    th:unless="${g.isDelete}"
+                                    th:attr="onclick='deleteGoods('+${g.id}+')'">删除</button>
+                        </td>
+                    </tr>
+                    <tr th:if="${goods.content.isEmpty()}">
+                        <td colspan="8" class="adm_empty">暂无数据</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="adm_pagination" th:if="${goods.totalPages > 1}">
+            <a th:href="@{/admin/goods(page=${goods.number - 1}, q=${q})}"
+               th:if="${goods.number > 0}" class="adm_btn adm_btn_sm">上一页</a>
+            <span class="adm_page_info"
+                  th:text="'第 ' + ${goods.number + 1} + ' / ' + ${goods.totalPages} + ' 页'"></span>
+            <a th:href="@{/admin/goods(page=${goods.number + 1}, q=${q})}"
+               th:if="${goods.number + 1 < goods.totalPages}" class="adm_btn adm_btn_sm">下一页</a>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="scripts">
+<script>
+function deleteGoods(id) {
+    if (confirm('确定删除该商品？')) {
+        $.post('/admin/goods/' + id + '/delete', function() { location.reload(); });
+    }
+}
+</script>
+</th:block>
+</body>
+</html>

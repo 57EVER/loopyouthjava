@@ -1,0 +1,40 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+<head>
+    <th:block layout:fragment="head"></th:block>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div class="adm_stats_grid">
+        <div class="adm_stat_card">
+            <div class="adm_stat_number" th:text="${stats.userCount}">0</div>
+            <div class="adm_stat_label">注册用户</div>
+        </div>
+        <div class="adm_stat_card">
+            <div class="adm_stat_number" th:text="${stats.goodsCount}">0</div>
+            <div class="adm_stat_label">商品总数</div>
+        </div>
+        <div class="adm_stat_card">
+            <div class="adm_stat_number" th:text="${stats.orderCount}">0</div>
+            <div class="adm_stat_label">订单总数</div>
+        </div>
+        <div class="adm_stat_card">
+            <div class="adm_stat_number" th:text="${stats.commentCount}">0</div>
+            <div class="adm_stat_label">评论总数</div>
+        </div>
+    </div>
+
+    <div class="adm_card" style="margin-top:32px">
+        <h3 class="adm_card_title">快捷操作</h3>
+        <div class="adm_quick_links">
+            <a th:href="@{/admin/users}" class="adm_quick_link">用户管理</a>
+            <a th:href="@{/admin/goods}" class="adm_quick_link">商品管理</a>
+            <a th:href="@{/admin/orders}" class="adm_quick_link">订单管理</a>
+            <a th:href="@{/admin/comments}" class="adm_quick_link">评论管理</a>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>
