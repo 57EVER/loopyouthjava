@@ -784,12 +784,12 @@ body { background: var(--white); color: var(--gray-900); font-size: 14px; }
 .right_content {
   flex: 1; min-height: 560px; background: var(--white);
   border: 1px solid var(--gray-200); border-radius: var(--radius-lg);
-  padding: 0; box-sizing: border-box; overflow: hidden;
+  padding: 0; box-sizing: border-box; overflow: visible;
   box-shadow: var(--shadow-sm);
 }
 .uc-panel-header {
   padding: 24px 32px; border-bottom: 1px solid var(--gray-200);
-  background: var(--white);
+  background: var(--white); border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 .uc-panel-header h2 {
   font-size: 18px; font-weight: 700; color: var(--gray-900); margin: 0;
