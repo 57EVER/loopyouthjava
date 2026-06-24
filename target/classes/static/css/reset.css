@@ -1,0 +1,14 @@
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:'Helvetica Neue',Helvetica,Arial,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;color:#1a1a1a;background:#fff;line-height:1.6}
+h1,h2,h3,h4,h5,h6{font-weight:600;line-height:1.2}
+ul,ol{list-style:none}
+em{font-style:normal}
+a{text-decoration:none;color:inherit;transition:color .2s}
+img{border:0;max-width:100%;display:block}
+input,textarea,button,select{font-family:inherit;font-size:inherit;outline:none;border:none;background:none}
+button{cursor:pointer}
+.clearfix:before,.clearfix:after{content:"";display:table}
+.clearfix:after{clear:both}
+.fl{float:left}
+.fr{float:right}
